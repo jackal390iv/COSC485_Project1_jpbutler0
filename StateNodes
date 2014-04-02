@@ -1,0 +1,42 @@
+import java.util.ArrayList;
+public class StateNodes {
+
+    ArrayList<String> stateConections = new ArrayList<String>();
+    String stateID = null;
+    Boolean is_A_Final_State = false;
+    Boolean is_The_Sink_State = false;
+
+    public StateNodes() {
+    }
+
+    public void set_ID(String stateId) {
+        stateID = stateId;
+    }
+
+    public String return_ID() {
+        return stateID;
+    }
+
+    public void set_As_A_Final_State() {
+        is_A_Final_State = true;
+    }
+
+    public Boolean is_This_A_Final_State() {
+        return is_A_Final_State;
+    }
+
+    public void set_As_The_Sink_State() {
+        is_The_Sink_State = true;
+    }
+
+    public Boolean is_This_The_Sink_State() {
+        return is_The_Sink_State;
+    }
+
+    public void add_Connection(String element, String connection) {
+        String temp = element.concat(connection);
+        stateConections.add(temp);        
+    }
+    
+    
+}
