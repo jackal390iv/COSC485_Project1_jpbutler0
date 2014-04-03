@@ -11,11 +11,14 @@ public class States {
     String starting_State = null;
     Integer starting_State_Location = -1;
 
-    //may need to create the sink state durring set up in scanner class
     public States() {
-        create_Sink_State();
     }
 
+    /**
+     * 
+     * @param stateId
+     * @return stateLocation
+     */
     public int find_An_Existing_State(String stateId) {
         int stateLocation = -1;
         String temp;
@@ -28,12 +31,18 @@ public class States {
         return stateLocation;
     }
 
+    /**
+     * 
+     * @param stateId
+     * @param element
+     * @param connection 
+     */
     public void add_A_Connection(String stateId, String element, String connection) {
         Boolean temp = false;
         int stateLocation = find_An_Existing_State(stateId);
-        //states.get(stateLocation).add_Connection(element, connection);
+        //WARNING: states.get(stateLocation).add_Connection(element, connection);
         temp = states.get(stateLocation).add_Connection(element, connection);
-        //check to see if this registers ^
+        //WARNING: check to see if this registers ^
 
         if ((NFA_Has_Been_Found == false) && (temp == true)) {
             is_This_An_NFA = true;
@@ -41,46 +50,68 @@ public class States {
         }
     }
 
+    /**
+     * 
+     * @return is_This_An_NFA
+     */
     public Boolean is_This_An_NFA_Diagram() {
         return is_This_An_NFA;
     }
 
+    /**
+     * 
+     * @param stateId 
+     */
     public void set_The_State_ID(String stateId) {
         states.add(new StateNodes(stateId));
     }
 
-    //must implement the method while readeing dfa.txt
+    //WARNING: must implement the method while readeing dfa.txt
+    /**
+     * 
+     */
     public void create_Sink_State() {
         states.add(new StateNodes("{}"));
         states.get(0).set_As_The_Sink_State();
     }
 
-    //on second though ignore this step... this makes it to complicated
-    //just check for sink state durring scan
+    /*
+    //WARNING: on second though ignore this step... this makes it to complicated...just check for sink state durring scan
     public void add_Connection_To_Sink_State(String connection) {
-        states.get(0).add_Connection(connection, "{}");
-    }
-
+    states.get(0).add_Connection(connection, "{}");
+    }*/
+    /**
+     * 
+     * @param stateId 
+     */
     public void set_Starting_State(String stateId) {
         int stateLocation = find_An_Existing_State(stateId);
         states.get(stateLocation).set_As_The_Starting_State();
 
         starting_State = stateId;
         starting_State_Location = stateLocation;
-        //this keeps track of the starting state
+        //WARNING:this keeps track of the starting state
     }
 
-    //must put in a loop for this method in scanner to cover all possible final states
+    //WARNING: must put in a loop for this method in scanner to cover all possible final states
+    /**
+     * 
+     * @param stateId 
+     */
     public void set_Final_State(String stateId) {
         int stateLocation = find_An_Existing_State(stateId);
-        //this method does not keep track of the final states
-        //However the StateNodes class does keep track of final states; on an individual basis
+        //WARNING: this method does not keep track of the final states.However the StateNodes class does keep track of final states; on an individual basis
         final_States.add(stateId);
         final_States_Location.add(stateLocation);
-        //This ArrayList will also keep track of your final states       
+        //WARNING: This ArrayList will also keep track of your final states       
         states.get(stateLocation).set_As_A_Final_State();
     }
 
+    /**
+     * 
+     * @param the_String
+     * @return validation
+     */
     public String string_Validation_Check(String the_String) {
         String validation = "is accepted";
         int x = 0;
@@ -106,8 +137,10 @@ public class States {
         return validation;
     }
 
-    //this method checks to see if there is a connection. if there is it will return the stateId,
-    //if there isn't it will return "false"
+    //WARNING: this method checks to see if there is a connection. if there is it will return the stateId, if there isn't it will return "false"
+    /*
+     * 
+     */
     public String string_Validation_Helper(String element, Integer stateLocation) {
         String connection = states.get(stateLocation).find_Existing_Connection(element);
         return connection;
