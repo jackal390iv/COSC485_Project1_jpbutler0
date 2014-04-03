@@ -5,9 +5,9 @@ public class States {
 
     ArrayList<StateNodes> states = new ArrayList<StateNodes>();
     ArrayList<String> final_States = new ArrayList<String>();
+    ArrayList<String> state_Elements = new ArrayList<String>();
     ArrayList<Integer> final_States_Location = new ArrayList<Integer>();
     Boolean is_This_An_NFA = false;
-    Boolean NFA_Has_Been_Found = false;
     String starting_State = null;
     Integer starting_State_Location = -1;
 
@@ -22,7 +22,7 @@ public class States {
     public int find_An_Existing_State(String stateId) {
         int stateLocation = -1;
         String temp;
-        for (int i = 0; i <= states.size(); i++) {
+        for (int i = 0; i < states.size(); i++) {
             temp = states.get(i).return_ID();
             if (temp.equals(stateId)) {
                 stateLocation = i;
@@ -32,22 +32,40 @@ public class States {
     }
 
     /**
+     * 
+     * @param element 
+     */
+    public void add_Element(String element) {
+        state_Elements.add(element);
+    }
+
+    //WARNING: I don't think 'elements' is the right word... Nor is diagram...
+    /**
+     * 
+     */
+    public void print_State_Elements() {
+        System.out.println("The elements used in this diagram are: ");
+        for (int i = 0; i < state_Elements.size(); i++) {
+            System.out.print(state_Elements.get(i) + "\t");
+        }
+    }
+
+    /**
      *
      * @param stateId
      * @param element
      * @param connection
      */
     public void add_A_Connection(String stateId, String element, String connection) {
-        Boolean temp = false;
         int stateLocation = find_An_Existing_State(stateId);
-        //WARNING: states.get(stateLocation).add_Connection(element, connection);
-        temp = states.get(stateLocation).add_Connection(element, connection);
-        //WARNING: check to see if this registers ^
-
-        if ((NFA_Has_Been_Found == false) && (temp == true)) {
-            is_This_An_NFA = true;
-            NFA_Has_Been_Found = true;
+        if (stateLocation == -1) {
+            System.out.println("falure");
+            return;
         }
+        if (element.equals("e")) {
+            is_This_An_NFA = true;
+        }
+        states.get(stateLocation).add_Connection(element, connection);
     }
 
     /**
@@ -62,7 +80,7 @@ public class States {
      *
      * @param stateId
      */
-    public void set_The_State_ID(String stateId) {
+    public void create_New_State(String stateId) {
         states.add(new StateNodes(stateId));
     }
 
@@ -76,21 +94,30 @@ public class States {
     }
 
     /*
-     //WARNING: on second though ignore this step... this makes it to complicated...just check for sink state durring scan
-     public void add_Connection_To_Sink_State(String connection) {
-     states.get(0).add_Connection(connection, "{}");
-     }*/
+    //WARNING: on second though ignore this step... this makes it to complicated...just check for sink state durring scan
+    public void add_Connection_To_Sink_State(String connection) {
+    states.get(0).add_Connection(connection, "{}");
+    }*/
     /**
      *
      * @param stateId
      */
     public void set_Starting_State(String stateId) {
         int stateLocation = find_An_Existing_State(stateId);
+        if (stateLocation == -1) {
+            return;
+        }
         states.get(stateLocation).set_As_The_Starting_State();
-
         starting_State = stateId;
         starting_State_Location = stateLocation;
         //WARNING:this keeps track of the starting state
+    }
+
+    /**
+     * 
+     */
+    public void print_Starting_State() {
+        System.out.println("The starting state is: " + starting_State);
     }
 
     //WARNING: must put in a loop for this method in scanner to cover all possible final states
@@ -100,11 +127,25 @@ public class States {
      */
     public void set_Final_State(String stateId) {
         int stateLocation = find_An_Existing_State(stateId);
+        if (stateLocation == -1) {
+            return;
+        }
         //WARNING: this method does not keep track of the final states.However the StateNodes class does keep track of final states; on an individual basis
         final_States.add(stateId);
         final_States_Location.add(stateLocation);
         //WARNING: This ArrayList will also keep track of your final states       
         states.get(stateLocation).set_As_A_Final_State();
+    }
+
+    //WARNING: I don't think diagram is the right word
+    /**
+     * 
+     */
+    public void print_Final_State() {
+        System.out.println("The final states for this diagram are: ");
+        for (int i = 0; i < final_States.size(); i++) {
+            System.out.print(final_States.get(i) + "\t");
+        }
     }
 
     /**
@@ -118,7 +159,7 @@ public class States {
         int y = 1;
         int stateLocation = starting_State_Location;
 
-        while ((validation.equals("is accepted")) && (y <= the_String.length())) {
+        while ((validation.equals("is accepted")) && (y < the_String.length())) {
             String element = the_String.substring(x, y);
 
             element = string_Validation_Helper(element, stateLocation);
@@ -144,5 +185,20 @@ public class States {
     public String string_Validation_Helper(String element, Integer stateLocation) {
         String connection = states.get(stateLocation).find_Existing_Connection(element);
         return connection;
+    }
+
+    /**
+     * 
+     */
+    public void print_States_And_Connections() {
+
+        System.out.println("\n"+"Printing all states and connections now: ");
+        for (int i = 0; i < states.size(); i++) {
+            System.out.println("\n"+"Current state: " + states.get(i).return_ID() + " and its connections are: " + "\t");
+            for (int t = 0; t < states.get(i).stateConections.size(); t++) {
+                String temp = states.get(i).stateConections.get(t);
+                System.out.print(temp.charAt(0) + " connected to: " + temp.substring(1) + "\n");
+            }
+        }
     }
 }
