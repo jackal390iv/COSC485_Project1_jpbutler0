@@ -86,27 +86,28 @@ public class StateNodes {
         stateConections.add(temp);
         return this_Diagram_Is_An_NFA;
     }
-
-    /**
-     *
-     * @param element
-     * @return existing_Connection
-     */
-    public String find_Existing_Connection(String element) {
-        String existing_Connection = "false";
-        String temp = "";
-        int i = 0;
-        while (((i < stateConections.size()) && (existing_Connection.equals("false")) && (is_The_Sink_State == false))) {
-            temp = stateConections.get(i).substring(0, 1);
-            if ((temp.equals(element)) || (temp.equals("e"))) {
-                existing_Connection = stateConections.get(i).substring(1);
+    
+    //this method searches for a connection and returns either the stateId of the found connection or "false" for unfound connection
+    public String find_Connection(String element){
+        Boolean found=false;
+        String temp;
+        int i=0;
+        while((i<stateConections.size())&&(found==false)){
+            temp=stateConections.get(i);
+            temp=temp.substring(0,1);
+            if(temp.equals(element)){
+                found=true;
+                //System.out.println("true");
             }
-            i++;
+            if(found==false){
+            i++;}
         }
-
-        if (is_The_Sink_State == true) {
-            existing_Connection = "false";
+        if(found==true){
+            element=stateConections.get(i);
+            element=element.substring(1);
+            System.out.println("connection found from: "+stateID+" to: "+element);
+            return element;
         }
-        return existing_Connection;
+        return "false";
     }
 }
