@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 public class StateNodes {
@@ -97,7 +96,7 @@ public class StateNodes {
         String existing_Connection = "false";
         String temp = "";
         int i = 0;
-        while (((i <= stateConections.size()) && (existing_Connection.equals("false")) && (is_The_Sink_State == false))) {
+        while (((i < stateConections.size()) && (existing_Connection.equals("false")) && (is_The_Sink_State == false))) {
             temp = stateConections.get(i).substring(0, 1);
             if ((temp.equals(element)) || (temp.equals("e"))) {
                 existing_Connection = stateConections.get(i).substring(1);
