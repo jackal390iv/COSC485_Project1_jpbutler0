@@ -153,39 +153,40 @@ public class States {
      * @param the_String
      * @return validation
      */
-    public String string_Validation_Check(String the_String) {
-        String validation = "is accepted";
-        int x = 0;
-        int y = 1;
-        int stateLocation = starting_State_Location;
-
-        while ((validation.equals("is accepted")) && (y < the_String.length())) {
-            String element = the_String.substring(x, y);
-
-            element = string_Validation_Helper(element, stateLocation);
-
-            if (element.equals("false")) {
-                validation = "is rejected";
-                y = the_String.length() + 5;
-            } else {
-                stateLocation = find_An_Existing_State(element);
-            }
-
-            x++;
-            y++;
-        }
-
-        return validation;
+    public String string_Validation_Check(String element) {        
+        element=find_Existing_Connection(element,0, starting_State);
+        return element;
     }
 
-    //WARNING: this method checks to see if there is a connection. if there is it will return the stateId, if there isn't it will return "false"
+    //this method is done need find_Connection method
+    public String find_Existing_Connection(String strings, int location, String stateId){
+                       
+        int locate=find_An_Existing_State(stateId);
+        stateId=states.get(locate).find_Connection(strings.substring(location, location+1));
+        
+        //the string is rejected
+        if(stateId.equals("false")){
+            strings=strings+" is rejected";
+            return strings;
+        }
+        
+        //recursion for next element in the string
+        else if(location+1<strings.length()){
+        location++;
+        find_Existing_Connection(strings,location,stateId);
+        }
+        
+        //if it makes it here the string is accepted
+        strings=strings+" is accepted";
+        return strings;
+    }
+    
+    
     /*
-     * 
-     */
     public String string_Validation_Helper(String element, Integer stateLocation) {
         String connection = states.get(stateLocation).find_Existing_Connection(element);
         return connection;
-    }
+    }*/
 
     /**
      * 
@@ -201,4 +202,22 @@ public class States {
             }
         }
     }
+    
+    /*
+    public Boolean find_Connection(String element){
+        String sub_String=null;
+        Boolean connection_Exists=true;
+        int k=0;
+            while((k<element.length())&&(connection_Exists==true)){
+                sub_String=element.substring(k, k+1);
+                
+                //connection_Exists=states.get(starting_State_Location).find_Existing_Connection(sub_String);
+                
+                
+                //System.out.println(sub_String);
+                k++;
+            }
+        return connection_Exists;
+    }*/
+   
 }
