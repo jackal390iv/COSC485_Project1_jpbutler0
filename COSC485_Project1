@@ -10,20 +10,20 @@ public class COSC485_Project1 {
 
 
         /*
-        String element = "a";
-        String connection = "q01";
+         String element = "a";
+         String connection = "q01";
         
-        String temp = element.concat(connection);
+         String temp = element.concat(connection);
         
-        System.out.println("element = " + element);
-        System.out.println("connection = " + connection);
-        System.out.println("temp = " + temp);
+         System.out.println("element = " + element);
+         System.out.println("connection = " + connection);
+         System.out.println("temp = " + temp);
         
-        String tempmod=temp.substring(1);        
-        System.out.println("tempMod = " + tempmod);
+         String tempmod=temp.substring(1);        
+         System.out.println("tempMod = " + tempmod);
         
-        String tempextra = temp.substring(0, 1);
-        System.out.println("tempExtra = " + tempextra);
+         String tempextra = temp.substring(0, 1);
+         System.out.println("tempExtra = " + tempextra);
          */
 
         //WARNING: in order for the above to work ^ all elements nmust be one character long..
