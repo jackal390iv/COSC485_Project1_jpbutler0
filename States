@@ -1,25 +1,115 @@
+
 import java.util.ArrayList;
+
 public class States {
 
     ArrayList<StateNodes> states = new ArrayList<StateNodes>();
+    ArrayList<String> final_States = new ArrayList<String>();
+    ArrayList<Integer> final_States_Location = new ArrayList<Integer>();
     Boolean is_This_An_NFA = false;
+    Boolean NFA_Has_Been_Found = false;
+    String starting_State = null;
+    Integer starting_State_Location = -1;
 
+    //may need to create the sink state durring set up in scanner class
     public States() {
+        create_Sink_State();
     }
 
-    public void set_State_As_NFA() {
-        is_This_An_NFA = true;
+    public int find_An_Existing_State(String stateId) {
+        int stateLocation = -1;
+        String temp;
+        for (int i = 0; i <= states.size(); i++) {
+            temp = states.get(i).return_ID();
+            if (temp.equals(stateId)) {
+                stateLocation = i;
+            }
+        }
+        return stateLocation;
+    }
+
+    public void add_A_Connection(String stateId, String element, String connection) {
+        Boolean temp = false;
+        int stateLocation = find_An_Existing_State(stateId);
+        //states.get(stateLocation).add_Connection(element, connection);
+        temp = states.get(stateLocation).add_Connection(element, connection);
+        //check to see if this registers ^
+
+        if ((NFA_Has_Been_Found == false) && (temp == true)) {
+            is_This_An_NFA = true;
+            NFA_Has_Been_Found = true;
+        }
     }
 
     public Boolean is_This_An_NFA_Diagram() {
         return is_This_An_NFA;
     }
 
-    public int findExistingState() {
-        for(int i=0;i<states.size){
-            
+    public void set_The_State_ID(String stateId) {
+        states.add(new StateNodes(stateId));
+    }
+
+    //must implement the method while readeing dfa.txt
+    public void create_Sink_State() {
+        states.add(new StateNodes("{}"));
+        states.get(0).set_As_The_Sink_State();
+    }
+
+    //on second though ignore this step... this makes it to complicated
+    //just check for sink state durring scan
+    public void add_Connection_To_Sink_State(String connection) {
+        states.get(0).add_Connection(connection, "{}");
+    }
+
+    public void set_Starting_State(String stateId) {
+        int stateLocation = find_An_Existing_State(stateId);
+        states.get(stateLocation).set_As_The_Starting_State();
+
+        starting_State = stateId;
+        starting_State_Location = stateLocation;
+        //this keeps track of the starting state
+    }
+
+    //must put in a loop for this method in scanner to cover all possible final states
+    public void set_Final_State(String stateId) {
+        int stateLocation = find_An_Existing_State(stateId);
+        //this method does not keep track of the final states
+        //However the StateNodes class does keep track of final states; on an individual basis
+        final_States.add(stateId);
+        final_States_Location.add(stateLocation);
+        //This ArrayList will also keep track of your final states       
+        states.get(stateLocation).set_As_A_Final_State();
+    }
+
+    public String string_Validation_Check(String the_String) {
+        String validation = "is accepted";
+        int x = 0;
+        int y = 1;
+        int stateLocation = starting_State_Location;
+
+        while ((validation.equals("is accepted")) && (y <= the_String.length())) {
+            String element = the_String.substring(x, y);
+
+            element = string_Validation_Helper(element, stateLocation);
+
+            if (element.equals("false")) {
+                validation = "is rejected";
+                y = the_String.length() + 5;
+            } else {
+                stateLocation = find_An_Existing_State(element);
+            }
+
+            x++;
+            y++;
         }
-        
-        return -1;
+
+        return validation;
+    }
+
+    //this method checks to see if there is a connection. if there is it will return the stateId,
+    //if there isn't it will return "false"
+    public String string_Validation_Helper(String element, Integer stateLocation) {
+        String connection = states.get(stateLocation).find_Existing_Connection(element);
+        return connection;
     }
 }
