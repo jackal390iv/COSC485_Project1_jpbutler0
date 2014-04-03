@@ -1,18 +1,24 @@
+
 import java.util.ArrayList;
+
 public class StateNodes {
 
     ArrayList<String> stateConections = new ArrayList<String>();
     String stateID = null;
     Boolean is_A_Final_State = false;
+    Boolean is_A_Start_State = false;
     Boolean is_The_Sink_State = false;
+    Boolean this_Diagram_Is_An_NFA = false;
 
-    public StateNodes() {
-    }
-
-    public void set_ID(String stateId) {
+    //test to make sure this works
+    public StateNodes(String stateId) {
         stateID = stateId;
     }
 
+    /*
+    public void set_ID(String stateId) {
+    stateID = stateId;
+    }*/
     public String return_ID() {
         return stateID;
     }
@@ -25,6 +31,14 @@ public class StateNodes {
         return is_A_Final_State;
     }
 
+    public void set_As_The_Starting_State() {
+        is_A_Start_State = true;
+    }
+
+    public Boolean is_This_The_Starting_State() {
+        return is_A_Start_State;
+    }
+
     public void set_As_The_Sink_State() {
         is_The_Sink_State = true;
     }
@@ -33,10 +47,31 @@ public class StateNodes {
         return is_The_Sink_State;
     }
 
-    public void add_Connection(String element, String connection) {
+    //for nfa you must keep tack of this in your states method that calls this method
+    public Boolean add_Connection(String element, String connection) {
+        if (element.equals("e")) {
+            this_Diagram_Is_An_NFA = true;
+        }
         String temp = element.concat(connection);
-        stateConections.add(temp);        
+        stateConections.add(temp);
+        return this_Diagram_Is_An_NFA;
     }
-    
-    
+
+    public String find_Existing_Connection(String element) {
+        String existing_Connection = "false";
+        String temp = "";
+        int i = 0;
+        while (((i <= stateConections.size()) && (existing_Connection.equals("false")) && (is_The_Sink_State == false))) {
+            temp = stateConections.get(i).substring(0, 1);
+            if (temp.equals(element)) {
+                existing_Connection = stateConections.get(i).substring(1);
+            }
+            i++;
+        }
+
+        if (is_The_Sink_State == true) {
+            existing_Connection = "false";
+        }
+        return existing_Connection;
+    }
 }
