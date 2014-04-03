@@ -1,27 +1,60 @@
+
+import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.io.File;
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class TheScanner {
 
+    States diagram = new States();
     String DFA_Or_NFA_Txt_Location = null;
     String string_File_Txt_Location = null;
-    String output_Txt_Location = null;    
-    
+    String output_Txt_Location = null;
+    Scanner input = new Scanner(System.in);
+    String path = null;
+    String line = null;
+    ArrayList<String> DFA_NFA = new ArrayList<String>();
+    BufferedReader br = null;
+
     public TheScanner() {
     }
 
     public void userMessage() {
+        //diagram.create_Sink_State();
+        //System.out.println
+        //("Please enter the location/path to your DFA/NFA file now. For example: 'C:\\COSC485_Project1_jpbutler0\\...\\DFA.txt'"+ "\n");
+        //path=input.nextLine(); 
+
+        //System.out.println(path);
+
+        try {
+            File file = new File("/home/jackal/Desktop");
+            //File file = new File(path);
+            Scanner scan = new Scanner(file);
+
+            while (scan.hasNextLine()) {
+                line = scan.nextLine();
+                DFA_NFA.add(line);
+                System.out.println(line);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("I'm sorry, but your file pathing was incorect. Please try again.");
+            //userMessage();
+        }
+
     }
 
-    //first throw into an arraylist to text for correctness
-    //then use this method to create DFA/NFA
+    //WARNING: first throw into an arraylist to text for correctness. Then use this method to create DFA/NFA
     public void read_DFA_Or_NFA_TXT() {
     }
 
-    //first throw into an arraylist to text for correctness
+    //WARNING: first throw into an arraylist to text for correctness
     public void read_String_Txt() {
     }
 
-    //test for correctness
+    //WARNING: test for correctness
     public void read_And_Write_Output_Txt() {
     }
 }
