@@ -10,7 +10,7 @@ public class StateNodes {
     Boolean is_The_Sink_State = false;
     Boolean this_Diagram_Is_An_NFA = false;
 
-    //test to make sure this works
+    //WARNING: test to make sure this works
     public StateNodes(String stateId) {
         stateID = stateId;
     }
@@ -19,35 +19,65 @@ public class StateNodes {
     public void set_ID(String stateId) {
     stateID = stateId;
     }*/
+    /**
+     * This method returns the current state nodes identification string
+     * @return stateID
+     */
     public String return_ID() {
         return stateID;
     }
 
+    /**
+     * This method designates the currect state node as a final state
+     */
     public void set_As_A_Final_State() {
         is_A_Final_State = true;
     }
 
+    /*
+     * This method returns true if the current state node is a final state
+     */
     public Boolean is_This_A_Final_State() {
         return is_A_Final_State;
     }
 
+    /**
+     * 
+     */
     public void set_As_The_Starting_State() {
         is_A_Start_State = true;
     }
 
+    /**
+     * 
+     * @return is_A_Start_State
+     */
     public Boolean is_This_The_Starting_State() {
         return is_A_Start_State;
     }
 
+    /**
+     * 
+     */
     public void set_As_The_Sink_State() {
         is_The_Sink_State = true;
     }
 
+    /**
+     * 
+     * @return is_The_Sink_State
+     */
     public Boolean is_This_The_Sink_State() {
         return is_The_Sink_State;
     }
 
-    //for nfa you must keep tack of this in your states method that calls this method
+    //WARNING: for nfa you must keep tack of this in your states method that calls this method
+    /**
+     * 
+     * @param element
+     * @param connection
+     * @return this_Diagram_Is_An_NFA
+     */
     public Boolean add_Connection(String element, String connection) {
         if (element.equals("e")) {
             this_Diagram_Is_An_NFA = true;
@@ -57,13 +87,18 @@ public class StateNodes {
         return this_Diagram_Is_An_NFA;
     }
 
+    /**
+     * 
+     * @param element
+     * @return existing_Connection
+     */
     public String find_Existing_Connection(String element) {
         String existing_Connection = "false";
         String temp = "";
         int i = 0;
         while (((i <= stateConections.size()) && (existing_Connection.equals("false")) && (is_The_Sink_State == false))) {
             temp = stateConections.get(i).substring(0, 1);
-            if (temp.equals(element)) {
+            if ((temp.equals(element)) || (temp.equals("e"))) {
                 existing_Connection = stateConections.get(i).substring(1);
             }
             i++;
