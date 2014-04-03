@@ -11,9 +11,6 @@ public class TheScanner {
     String path = null;
     String line = null;
     ArrayList<String> DFA_NFA = new ArrayList<String>();
-    ArrayList<String> DFA = new ArrayList<String>();
-    ArrayList<String> NFA = new ArrayList<String>();
-    ArrayList<String> String = new ArrayList<String>();
     ArrayList<String> the_Strings = new ArrayList<String>();
 
     public TheScanner() {
@@ -41,13 +38,21 @@ public class TheScanner {
 
         designate_Starting_And_Final_States();
 
-        //diagram.print_Starting_State();
+        diagram.print_Starting_State();
+        System.out.println();
 
-        //diagram.print_Final_State();
+        diagram.print_Final_State();
+        System.out.println();
 
         designate_State_Connections();
-
+        
         diagram.print_States_And_Connections();
+        
+        System.out.println();
+        
+        testing_Strings();
+
+        //diagram.print_States_And_Connections();
 
         //writer();
     }
@@ -84,54 +89,50 @@ public class TheScanner {
      */
     public void because_Linux_Hates_Pathing() {
 
-        DFA.add("M = { States, Alphabet, Transition Functions, Starting State, Final States }");
-        DFA.add("where,");
-        DFA.add("States = { q0, q1, q2 },");
-        DFA.add("Alphabet = { a, b },");
-        DFA.add("Starting State = q0,");
-        DFA.add("Final States = { q2 },");
-        DFA.add("Transition Functions = {");
-        DFA.add("( q0, a, q1 ),");
-        DFA.add("( q1, a, q1 ),");
-        DFA.add("( q1, b, q2 )");
-        DFA.add("}");
+        DFA_NFA.add("M = { States, Alphabet, Transition Functions, Starting State, Final States }");
+        DFA_NFA.add("where,");
+        DFA_NFA.add("States = { q0, q1, q2 },");
+        DFA_NFA.add("Alphabet = { a, b },");
+        DFA_NFA.add("Starting State = q0,");
+        DFA_NFA.add("Final States = { q2 },");
+        DFA_NFA.add("Transition Functions = {");
+        DFA_NFA.add("( q0, a, q1 ),");
+        DFA_NFA.add("( q1, a, q1 ),");
+        DFA_NFA.add("( q1, b, q2 )");
+        DFA_NFA.add("}");
 
-        String.add("aaaaabb");
-        String.add("aaaaaaaa");
-        String.add("aaaaaaab");
-        String.add("bbbbbbbbbb");
+        the_Strings.add("aaaaabb");
+        the_Strings.add("aaaaaaaa");
+        the_Strings.add("aaaaaaab");
+        the_Strings.add("bbbbbbbbbb");
 
-        NFA.add("M = { States, Alphabet, Transition Functions, Starting State, Final States }");
-        NFA.add("where,");
-        NFA.add("States = { q0, q1, q2 },");
-        NFA.add("Alphabet = { a, b },");
-        NFA.add("Starting State = q0,");
-        NFA.add("Final States = { q2 },");
-        NFA.add("Transition Functions = {");
-        NFA.add("( q0, e, q1 ),");
-        NFA.add("( q0, a, q1 ),");
-        NFA.add("( q0, a, q2 ),");
-        NFA.add("( q1, a, q1 ),");
-        NFA.add("( q1, b, q2 )");
-        NFA.add("}");
+        /*
+        DFA_NFA.add("M = { States, Alphabet, Transition Functions, Starting State, Final States }");
+        DFA_NFA.add("where,");
+        DFA_NFA.add("States = { q0, q1, q2 },");
+        DFA_NFA.add("Alphabet = { a, b },");
+        DFA_NFA.add("Starting State = q0,");
+        DFA_NFA.add("Final States = { q2 },");
+        DFA_NFA.add("Transition Functions = {");
+        DFA_NFA.add("( q0, e, q1 ),");
+        DFA_NFA.add("( q0, a, q1 ),");
+        DFA_NFA.add("( q0, a, q2 ),");
+        DFA_NFA.add("( q1, a, q1 ),");
+        DFA_NFA.add("( q1, b, q2 )");
+        DFA_NFA.add("}");
+         */
 
-        for (int i = 0; i < DFA.size(); i++) {
-            String temp = DFA.get(i);
+        for (int i = 0; i < DFA_NFA.size(); i++) {
+            String temp = DFA_NFA.get(i);
             temp = temp.trim().toLowerCase();
-            DFA.remove(i);
-            DFA.add(i, temp);
+            DFA_NFA.remove(i);
+            DFA_NFA.add(i, temp);
         }
-        for (int i = 0; i < NFA.size(); i++) {
-            String temp = NFA.get(i);
+        for (int i = 0; i < the_Strings.size(); i++) {
+            String temp = the_Strings.get(i);
             temp = temp.trim().toLowerCase();
-            NFA.remove(i);
-            NFA.add(i, temp);
-        }
-        for (int i = 0; i < String.size(); i++) {
-            String temp = String.get(i);
-            temp = temp.trim().toLowerCase();
-            String.remove(i);
-            String.add(i, temp);
+            the_Strings.remove(i);
+            the_Strings.add(i, temp);
         }
 
     }
@@ -140,19 +141,10 @@ public class TheScanner {
     public void writer() {
     }
 
-    public void print_DFA() {
+    public void print_DFA_NFA() {
         System.out.println("The following is the ArrayList for the DFA.txt: ");
-        for (int i = 0; i < DFA.size(); i++) {
-            System.out.println(DFA.get(i));
-        }
-        System.out.println();
-    }
-
-    //WARNING: must change variable for actual pathing txt file ArryayList
-    public void print_NFA() {
-        System.out.println("The following is the ArrayList for the NFA.txt: ");
-        for (int i = 0; i < NFA.size(); i++) {
-            System.out.println(NFA.get(i));
+        for (int i = 0; i < DFA_NFA.size(); i++) {
+            System.out.println(DFA_NFA.get(i));
         }
         System.out.println();
     }
@@ -160,8 +152,8 @@ public class TheScanner {
     //WARNING: must change variable for actual pathing txt file ArryayList
     public void print_String() {
         System.out.println("The following is the ArrayList for the String.txt: ");
-        for (int i = 0; i < String.size(); i++) {
-            System.out.println(String.get(i));
+        for (int i = 0; i < the_Strings.size(); i++) {
+            System.out.println(the_Strings.get(i));
         }
         System.out.println();
     }
@@ -175,14 +167,14 @@ public class TheScanner {
 
         int found = -1;
         int k = 1;
-        while ((k <= DFA.size()) && (found == -1)) {
-            if ((DFA.get(k).contains("states")) && (!(DFA.get(k).contains("final")))) {
+        while ((k <= DFA_NFA.size()) && (found == -1)) {
+            if ((DFA_NFA.get(k).contains("states")) && (!(DFA_NFA.get(k).contains("final")))) {
                 found = k;
             }
             k++;
         }
 
-        String temp = DFA.get(found);
+        String temp = DFA_NFA.get(found);
 
         start = temp.indexOf("{");
         end = temp.indexOf("}");
@@ -218,9 +210,9 @@ public class TheScanner {
         int found = -1;
         int k = 1;
         String temp = null;
-        while ((k < DFA.size()) && (found == -1)) {
-            if ((DFA.get(k).contains("starting")) && (!(DFA.get(k).contains("alphabet")))) {
-                temp = DFA.get(k);
+        while ((k < DFA_NFA.size()) && (found == -1)) {
+            if ((DFA_NFA.get(k).contains("starting")) && (!(DFA_NFA.get(k).contains("alphabet")))) {
+                temp = DFA_NFA.get(k);
                 temp = temp.substring(temp.indexOf("=") + 1);
                 temp = temp.substring(0, temp.length() - 1);
                 if (temp.contains("{")) {
@@ -240,9 +232,9 @@ public class TheScanner {
 
         found = -1;
         k = 1;
-        while (k < DFA.size()) {
-            if ((DFA.get(k).contains("final")) && (!(DFA.get(k).contains("alphabet")))) {
-                temp = DFA.get(k);
+        while (k < DFA_NFA.size()) {
+            if ((DFA_NFA.get(k).contains("final")) && (!(DFA_NFA.get(k).contains("alphabet")))) {
+                temp = DFA_NFA.get(k);
                 temp = temp.substring(temp.indexOf("=") + 1);
                 if (temp.contains("{")) {
                     temp = temp.substring(temp.indexOf("{") + 1);
@@ -271,16 +263,16 @@ public class TheScanner {
         String current;
         String stateId;
         String current_Broken;
-        while (k < DFA.size()) {
-            if ((DFA.get(k).contains("transition")) && (!(DFA.get(k).contains("final")))) {
+        while (k < DFA_NFA.size()) {
+            if ((DFA_NFA.get(k).contains("transition")) && (!(DFA_NFA.get(k).contains("final")))) {
                 found = k;
             }
             k++;
         }
         String temp = "";
 
-        while (found < DFA.size()) {
-            temp = temp + " " + DFA.get(found);
+        while (found < DFA_NFA.size()) {
+            temp = temp + " " + DFA_NFA.get(found);
             found++;
         }
 
@@ -327,4 +319,15 @@ public class TheScanner {
              */
         }
     }
+     
+    public void testing_Strings(){
+        String correction=null;
+        for(int i=0;i<the_Strings.size();i++){
+            //System.out.println(the_Strings.get(i));
+            correction=diagram.string_Validation_Check(the_Strings.get(i)); 
+            System.out.println(correction+"\n");
+        }
+    }
+    
+    
 }
