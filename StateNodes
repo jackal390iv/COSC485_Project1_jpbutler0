@@ -16,11 +16,12 @@ public class StateNodes {
     }
 
     /*
-    public void set_ID(String stateId) {
-    stateID = stateId;
-    }*/
+     public void set_ID(String stateId) {
+     stateID = stateId;
+     }*/
     /**
      * This method returns the current state nodes identification string
+     *
      * @return stateID
      */
     public String return_ID() {
@@ -42,14 +43,14 @@ public class StateNodes {
     }
 
     /**
-     * 
+     *
      */
     public void set_As_The_Starting_State() {
         is_A_Start_State = true;
     }
 
     /**
-     * 
+     *
      * @return is_A_Start_State
      */
     public Boolean is_This_The_Starting_State() {
@@ -57,14 +58,14 @@ public class StateNodes {
     }
 
     /**
-     * 
+     *
      */
     public void set_As_The_Sink_State() {
         is_The_Sink_State = true;
     }
 
     /**
-     * 
+     *
      * @return is_The_Sink_State
      */
     public Boolean is_This_The_Sink_State() {
@@ -73,7 +74,7 @@ public class StateNodes {
 
     //WARNING: for nfa you must keep tack of this in your states method that calls this method
     /**
-     * 
+     *
      * @param element
      * @param connection
      * @return this_Diagram_Is_An_NFA
@@ -88,7 +89,7 @@ public class StateNodes {
     }
 
     /**
-     * 
+     *
      * @param element
      * @return existing_Connection
      */
