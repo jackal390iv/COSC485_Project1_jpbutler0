@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+public class TheScanner {
+
+    String DFA_Or_NFA_Txt_Location = null;
+    String string_File_Txt_Location = null;
+    String output_Txt_Location = null;    
+    
+    public TheScanner() {
+    }
+
+    public void userMessage() {
+    }
+
+    //first throw into an arraylist to text for correctness
+    //then use this method to create DFA/NFA
+    public void read_DFA_Or_NFA_TXT() {
+    }
+
+    //first throw into an arraylist to text for correctness
+    public void read_String_Txt() {
+    }
+
+    //test for correctness
+    public void read_And_Write_Output_Txt() {
+    }
+}
