@@ -15,7 +15,7 @@ public class States {
     }
 
     /**
-     * 
+     *
      * @param stateId
      * @return stateLocation
      */
@@ -32,10 +32,10 @@ public class States {
     }
 
     /**
-     * 
+     *
      * @param stateId
      * @param element
-     * @param connection 
+     * @param connection
      */
     public void add_A_Connection(String stateId, String element, String connection) {
         Boolean temp = false;
@@ -51,7 +51,7 @@ public class States {
     }
 
     /**
-     * 
+     *
      * @return is_This_An_NFA
      */
     public Boolean is_This_An_NFA_Diagram() {
@@ -59,8 +59,8 @@ public class States {
     }
 
     /**
-     * 
-     * @param stateId 
+     *
+     * @param stateId
      */
     public void set_The_State_ID(String stateId) {
         states.add(new StateNodes(stateId));
@@ -68,7 +68,7 @@ public class States {
 
     //WARNING: must implement the method while readeing dfa.txt
     /**
-     * 
+     *
      */
     public void create_Sink_State() {
         states.add(new StateNodes("{}"));
@@ -76,13 +76,13 @@ public class States {
     }
 
     /*
-    //WARNING: on second though ignore this step... this makes it to complicated...just check for sink state durring scan
-    public void add_Connection_To_Sink_State(String connection) {
-    states.get(0).add_Connection(connection, "{}");
-    }*/
+     //WARNING: on second though ignore this step... this makes it to complicated...just check for sink state durring scan
+     public void add_Connection_To_Sink_State(String connection) {
+     states.get(0).add_Connection(connection, "{}");
+     }*/
     /**
-     * 
-     * @param stateId 
+     *
+     * @param stateId
      */
     public void set_Starting_State(String stateId) {
         int stateLocation = find_An_Existing_State(stateId);
@@ -95,8 +95,8 @@ public class States {
 
     //WARNING: must put in a loop for this method in scanner to cover all possible final states
     /**
-     * 
-     * @param stateId 
+     *
+     * @param stateId
      */
     public void set_Final_State(String stateId) {
         int stateLocation = find_An_Existing_State(stateId);
@@ -108,7 +108,7 @@ public class States {
     }
 
     /**
-     * 
+     *
      * @param the_String
      * @return validation
      */
