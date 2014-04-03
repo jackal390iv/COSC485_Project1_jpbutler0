@@ -11,21 +11,43 @@ public class TheScanner {
     String path = null;
     String line = null;
     ArrayList<String> DFA_NFA = new ArrayList<String>();
+    ArrayList<String> DFA = new ArrayList<String>();
+    ArrayList<String> NFA = new ArrayList<String>();
+    ArrayList<String> String = new ArrayList<String>();
     ArrayList<String> the_Strings = new ArrayList<String>();
 
     public TheScanner() {
     }
 
     public void userMessage() {
-        diagram.create_Sink_State();
+
         //System.out.println("Please enter the location/path to your DFA/NFA file now. For example: 'C:\\COSC485_Project1_jpbutler0\\...\\DFA.txt'"+ "\n");
         //path=input.nextLine(); 
-        reader(0);
+        //reader(0);
         //System.out.println("Please enter the location/path to your String file now. For example: 'C:\\COSC485_Project1_jpbutler0\\...\\String.txt'"+ "\n");
         //path=input.nextLine(); 
-        reader(1);
-        
+        //reader(1);
+
+        because_Linux_Hates_Pathing();
+
+        //print_DFA();
+        //print_NFA();
+        //print_String();
+
         data_Entry();
+
+        //int i=diagram.find_An_Existing_State("q");
+        //System.out.println(i);
+
+        designate_Starting_And_Final_States();
+
+        //diagram.print_Starting_State();
+
+        //diagram.print_Final_State();
+
+        designate_State_Connections();
+
+        diagram.print_States_And_Connections();
 
         //writer();
     }
@@ -36,7 +58,8 @@ public class TheScanner {
      */
     public void reader(int choice) {
         try {
-            File file = new File("C:\\Users\\Reaper\\Desktop\\DFA.txt");
+
+            File file = new File("DFA.txt");
             //File file = new File(path);
             Scanner scan = new Scanner(file);
 
@@ -56,11 +79,252 @@ public class TheScanner {
         }
     }
 
+    /**
+     * 
+     */
+    public void because_Linux_Hates_Pathing() {
+
+        DFA.add("M = { States, Alphabet, Transition Functions, Starting State, Final States }");
+        DFA.add("where,");
+        DFA.add("States = { q0, q1, q2 },");
+        DFA.add("Alphabet = { a, b },");
+        DFA.add("Starting State = q0,");
+        DFA.add("Final States = { q2 },");
+        DFA.add("Transition Functions = {");
+        DFA.add("( q0, a, q1 ),");
+        DFA.add("( q1, a, q1 ),");
+        DFA.add("( q1, b, q2 )");
+        DFA.add("}");
+
+        String.add("aaaaabb");
+        String.add("aaaaaaaa");
+        String.add("aaaaaaab");
+        String.add("bbbbbbbbbb");
+
+        NFA.add("M = { States, Alphabet, Transition Functions, Starting State, Final States }");
+        NFA.add("where,");
+        NFA.add("States = { q0, q1, q2 },");
+        NFA.add("Alphabet = { a, b },");
+        NFA.add("Starting State = q0,");
+        NFA.add("Final States = { q2 },");
+        NFA.add("Transition Functions = {");
+        NFA.add("( q0, e, q1 ),");
+        NFA.add("( q0, a, q1 ),");
+        NFA.add("( q0, a, q2 ),");
+        NFA.add("( q1, a, q1 ),");
+        NFA.add("( q1, b, q2 )");
+        NFA.add("}");
+
+        for (int i = 0; i < DFA.size(); i++) {
+            String temp = DFA.get(i);
+            temp = temp.trim().toLowerCase();
+            DFA.remove(i);
+            DFA.add(i, temp);
+        }
+        for (int i = 0; i < NFA.size(); i++) {
+            String temp = NFA.get(i);
+            temp = temp.trim().toLowerCase();
+            NFA.remove(i);
+            NFA.add(i, temp);
+        }
+        for (int i = 0; i < String.size(); i++) {
+            String temp = String.get(i);
+            temp = temp.trim().toLowerCase();
+            String.remove(i);
+            String.add(i, temp);
+        }
+
+    }
+
     //WARNING: test for correctness
     public void writer() {
     }
-    
-    public void data_Entry(){
-        
+
+    public void print_DFA() {
+        System.out.println("The following is the ArrayList for the DFA.txt: ");
+        for (int i = 0; i < DFA.size(); i++) {
+            System.out.println(DFA.get(i));
+        }
+        System.out.println();
+    }
+
+    //WARNING: must change variable for actual pathing txt file ArryayList
+    public void print_NFA() {
+        System.out.println("The following is the ArrayList for the NFA.txt: ");
+        for (int i = 0; i < NFA.size(); i++) {
+            System.out.println(NFA.get(i));
+        }
+        System.out.println();
+    }
+
+    //WARNING: must change variable for actual pathing txt file ArryayList
+    public void print_String() {
+        System.out.println("The following is the ArrayList for the String.txt: ");
+        for (int i = 0; i < String.size(); i++) {
+            System.out.println(String.get(i));
+        }
+        System.out.println();
+    }
+
+    public void data_Entry() {
+        diagram.create_Sink_State();
+        String temp_Seperated = null;
+        int start;
+        int end;
+        int counter = 1;
+
+        int found = -1;
+        int k = 1;
+        while ((k <= DFA.size()) && (found == -1)) {
+            if ((DFA.get(k).contains("states")) && (!(DFA.get(k).contains("final")))) {
+                found = k;
+            }
+            k++;
+        }
+
+        String temp = DFA.get(found);
+
+        start = temp.indexOf("{");
+        end = temp.indexOf("}");
+        temp = temp.substring(start + 1, end - 1);
+
+        int t = 0;
+        int i = 0;
+        boolean ending = false;
+        while (i < temp.length()) {
+            if (temp.substring(i, i + 1).equals(",")) {
+                counter++;
+                temp_Seperated = temp.substring(t, i);
+                temp_Seperated = temp_Seperated.trim();
+                if (temp_Seperated.equals("")) {
+                    temp_Seperated = " ";
+                }
+                diagram.create_New_State(temp_Seperated);
+                t = i + 1;
+            } else if ((!(temp.substring(t).contains(","))) && (ending == false)) {
+                temp_Seperated = temp.substring(t);
+                temp_Seperated = temp_Seperated.trim();
+                if (temp_Seperated.equals("")) {
+                    temp_Seperated = " ";
+                }
+                ending = true;
+                diagram.create_New_State(temp_Seperated);
+            }
+            i++;
+        }
+    }
+
+    public void designate_Starting_And_Final_States() {
+        int found = -1;
+        int k = 1;
+        String temp = null;
+        while ((k < DFA.size()) && (found == -1)) {
+            if ((DFA.get(k).contains("starting")) && (!(DFA.get(k).contains("alphabet")))) {
+                temp = DFA.get(k);
+                temp = temp.substring(temp.indexOf("=") + 1);
+                temp = temp.substring(0, temp.length() - 1);
+                if (temp.contains("{")) {
+                    temp = temp.substring(temp.indexOf("{") + 1);
+                    temp = temp.trim();
+                    temp = temp.substring(0, temp.length() - 2);
+                }
+                temp = temp.trim();
+                if (temp.equals("")) {
+                    temp = " ";
+                }
+                diagram.set_Starting_State(temp);
+                found = k;
+            }
+            k++;
+        }
+
+        found = -1;
+        k = 1;
+        while (k < DFA.size()) {
+            if ((DFA.get(k).contains("final")) && (!(DFA.get(k).contains("alphabet")))) {
+                temp = DFA.get(k);
+                temp = temp.substring(temp.indexOf("=") + 1);
+                if (temp.contains("{")) {
+                    temp = temp.substring(temp.indexOf("{") + 1);
+                    temp = temp.trim();
+                    temp = temp.substring(0, temp.length() - 2);
+                }
+                temp = temp.trim();
+                if (temp.equals("")) {
+                    temp = " ";
+                }
+                diagram.set_Final_State(temp);
+                found = k;
+            }
+            k++;
+        }
+    }
+
+    public void designate_State_Connections() {
+        int found = -1;
+        int k = 1;
+        int locate_End;
+        int locate_First;
+        int locate;
+        String element;
+        String connection;
+        String current;
+        String stateId;
+        String current_Broken;
+        while (k < DFA.size()) {
+            if ((DFA.get(k).contains("transition")) && (!(DFA.get(k).contains("final")))) {
+                found = k;
+            }
+            k++;
+        }
+        String temp = "";
+
+        while (found < DFA.size()) {
+            temp = temp + " " + DFA.get(found);
+            found++;
+        }
+
+        temp = temp.substring(temp.indexOf("{") + 1).trim();
+        temp = temp.substring(0, temp.length() - 1).trim();
+
+        current = temp;
+        while (current.contains("(")) {
+            locate_First = current.indexOf("(");
+            current = current.substring(locate_First + 1);
+            locate_End = current.indexOf(")");
+            current_Broken = current.substring(0, locate_End - 1);
+
+            locate_First = current.indexOf(",");
+            stateId = current_Broken.substring(0, locate_First).trim();
+            if (stateId.equals("")) {
+                stateId = " ";
+            }
+            current_Broken = current_Broken.substring(locate_First + 1).trim();
+
+            if (current_Broken.substring(0, 1).equals("")) {
+                element = " ";
+            } else {
+                element = current_Broken.substring(0, 1);
+            }
+
+            locate_First = current.indexOf(",");
+            current_Broken = current_Broken.substring(1, current_Broken.length()).trim();
+            current_Broken = current_Broken.substring(1, current_Broken.length()).trim();
+
+            if (current_Broken.equals("")) {
+                connection = " ";
+            } else {
+                connection = current_Broken;
+            }
+
+            diagram.add_A_Connection(stateId, element, connection);
+
+            /*
+            System.out.println(temp);
+            System.out.println(stateId);
+            System.out.println(element);
+            System.out.println(connection);
+             */
+        }
     }
 }
