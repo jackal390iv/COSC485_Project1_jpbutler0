@@ -10,7 +10,7 @@ public class TheScanner {
     Scanner input = new Scanner(System.in);
     String path = null;
     String line = null;
-    ArrayList<String> DFA_NFA = new ArrayList<String>();
+    ArrayList<String> NFA_DFA = new ArrayList<String>();
     ArrayList<String> the_Strings = new ArrayList<String>();
 
     public TheScanner() {
@@ -20,51 +20,95 @@ public class TheScanner {
 
         //System.out.println("Please enter the location/path to your DFA/NFA file now. For example: 'C:\\COSC485_Project1_jpbutler0\\...\\DFA.txt'"+ "\n");
         //path=input.nextLine(); 
-        //reader(0);
+        reader(0, "/home/jackal/Desktop/NFA");
         //System.out.println("Please enter the location/path to your String file now. For example: 'C:\\COSC485_Project1_jpbutler0\\...\\String.txt'"+ "\n");
         //path=input.nextLine(); 
-        //reader(1);
+        reader(1, "/home/jackal/Desktop/Strings");
 
-        because_Linux_Hates_Pathing();
+        data_Entry(0);
 
-        //print_DFA();
-        //print_NFA();
-        //print_String();
-
-        data_Entry();
-
-        //int i=diagram.find_An_Existing_State("q");
-        //System.out.println(i);
+        data_Entry(1);
 
         designate_Starting_And_Final_States();
+
+
+
+        designate_State_Connections();
+
+
+
+
+        System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
+
+        diagram.print_State_Elements();
+        System.out.println("\n" + "-------------------------------");
+
+        System.out.println("\n" + "Original Starting & Final States:" + "\n" + "-------------------------------");
 
         diagram.print_Starting_State();
         System.out.println();
 
         diagram.print_Final_State();
-        System.out.println();
+        System.out.println("\n");
 
-        designate_State_Connections();
-        
+
+        System.out.println("\n" + "Original Connections:" + "\n" + "-------------------------------");
+
         diagram.print_States_And_Connections();
-        
-        System.out.println();
-        
-        testing_Strings();
 
-        //diagram.print_States_And_Connections();
+        System.out.println("-------------------------------");
 
-        //writer();
+
+
+
+
+        if (diagram.is_This_An_NFA_Diagram() == true) {
+            diagram.the_Converter();
+
+            diagram.print_e_Trans();
+
+            System.out.println("\n" + "-------------------------------");
+
+            diagram.build_NFA_States();
+
+
+
+            System.out.println("\n" + "NFA Connections:" + "\n" + "-------------------------------");
+
+            diagram.print_States_And_Connections();
+
+            /*
+            
+            System.out.println("\n" + "Original Starting & Final States:" + "\n" + "-------------------------------");
+            
+            diagram.print_Starting_State();
+            System.out.println();
+            
+            diagram.print_Final_State();
+            System.out.println("\n");
+            
+            
+            System.out.println("\n" + "Original Connections:" + "\n" + "-------------------------------");
+            
+            diagram.print_States_And_Connections();
+            
+            System.out.println("-------------------------------" + "\n");
+             */
+
+        }
+
+
+
     }
 
     /**
      * 
      * @param choice 
      */
-    public void reader(int choice) {
+    public void reader(int choice, String location_Txt) {
         try {
 
-            File file = new File("DFA.txt");
+            File file = new File(location_Txt);
             //File file = new File(path);
             Scanner scan = new Scanner(file);
 
@@ -72,7 +116,7 @@ public class TheScanner {
                 line = scan.nextLine();
                 if ((choice == 0) && (!(line.isEmpty()))) {
                     line = line.trim().toLowerCase();
-                    DFA_NFA.add(line);
+                    NFA_DFA.add(line);
                 } else if ((choice == 1) && (!(line.isEmpty()))) {
                     line = line.trim().toLowerCase();
                     the_Strings.add(line);
@@ -84,67 +128,10 @@ public class TheScanner {
         }
     }
 
-    /**
-     * 
-     */
-    public void because_Linux_Hates_Pathing() {
-
-        DFA_NFA.add("M = { States, Alphabet, Transition Functions, Starting State, Final States }");
-        DFA_NFA.add("where,");
-        DFA_NFA.add("States = { q0, q1, q2 },");
-        DFA_NFA.add("Alphabet = { a, b },");
-        DFA_NFA.add("Starting State = q0,");
-        DFA_NFA.add("Final States = { q2 },");
-        DFA_NFA.add("Transition Functions = {");
-        DFA_NFA.add("( q0, a, q1 ),");
-        DFA_NFA.add("( q1, a, q1 ),");
-        DFA_NFA.add("( q1, b, q2 )");
-        DFA_NFA.add("}");
-
-        the_Strings.add("aaaaabb");
-        the_Strings.add("aaaaaaaa");
-        the_Strings.add("aaaaaaab");
-        the_Strings.add("bbbbbbbbbb");
-
-        /*
-        DFA_NFA.add("M = { States, Alphabet, Transition Functions, Starting State, Final States }");
-        DFA_NFA.add("where,");
-        DFA_NFA.add("States = { q0, q1, q2 },");
-        DFA_NFA.add("Alphabet = { a, b },");
-        DFA_NFA.add("Starting State = q0,");
-        DFA_NFA.add("Final States = { q2 },");
-        DFA_NFA.add("Transition Functions = {");
-        DFA_NFA.add("( q0, e, q1 ),");
-        DFA_NFA.add("( q0, a, q1 ),");
-        DFA_NFA.add("( q0, a, q2 ),");
-        DFA_NFA.add("( q1, a, q1 ),");
-        DFA_NFA.add("( q1, b, q2 )");
-        DFA_NFA.add("}");
-         */
-
-        for (int i = 0; i < DFA_NFA.size(); i++) {
-            String temp = DFA_NFA.get(i);
-            temp = temp.trim().toLowerCase();
-            DFA_NFA.remove(i);
-            DFA_NFA.add(i, temp);
-        }
-        for (int i = 0; i < the_Strings.size(); i++) {
-            String temp = the_Strings.get(i);
-            temp = temp.trim().toLowerCase();
-            the_Strings.remove(i);
-            the_Strings.add(i, temp);
-        }
-
-    }
-
-    //WARNING: test for correctness
-    public void writer() {
-    }
-
-    public void print_DFA_NFA() {
+    public void print_NFA_DFA() {
         System.out.println("The following is the ArrayList for the DFA.txt: ");
-        for (int i = 0; i < DFA_NFA.size(); i++) {
-            System.out.println(DFA_NFA.get(i));
+        for (int i = 0; i < NFA_DFA.size(); i++) {
+            System.out.println(NFA_DFA.get(i));
         }
         System.out.println();
     }
@@ -158,23 +145,33 @@ public class TheScanner {
         System.out.println();
     }
 
-    public void data_Entry() {
-        diagram.create_Sink_State();
+    public void data_Entry(int type) {
+        if (type == 0) {
+            diagram.create_Sink_State();
+        }
         String temp_Seperated = null;
         int start;
         int end;
         int counter = 1;
 
+        String first_Check = "states";
+        String second_Check = "final";
+
+        if (type == 1) {
+            first_Check = "alphabet";
+            second_Check = "final";
+        }
+
         int found = -1;
         int k = 1;
-        while ((k <= DFA_NFA.size()) && (found == -1)) {
-            if ((DFA_NFA.get(k).contains("states")) && (!(DFA_NFA.get(k).contains("final")))) {
+        while ((k <= NFA_DFA.size()) && (found == -1)) {
+            if ((NFA_DFA.get(k).contains(first_Check)) && (!(NFA_DFA.get(k).contains(second_Check)))) {
                 found = k;
             }
             k++;
         }
 
-        String temp = DFA_NFA.get(found);
+        String temp = NFA_DFA.get(found);
 
         start = temp.indexOf("{");
         end = temp.indexOf("}");
@@ -191,7 +188,12 @@ public class TheScanner {
                 if (temp_Seperated.equals("")) {
                     temp_Seperated = " ";
                 }
-                diagram.create_New_State(temp_Seperated);
+                if (type == 0) {
+                    diagram.create_New_State(temp_Seperated);
+                }
+                if (type == 1) {
+                    diagram.add_Element(temp_Seperated);
+                }
                 t = i + 1;
             } else if ((!(temp.substring(t).contains(","))) && (ending == false)) {
                 temp_Seperated = temp.substring(t);
@@ -200,7 +202,12 @@ public class TheScanner {
                     temp_Seperated = " ";
                 }
                 ending = true;
-                diagram.create_New_State(temp_Seperated);
+                if (type == 0) {
+                    diagram.create_New_State(temp_Seperated);
+                }
+                if (type == 1) {
+                    diagram.add_Element(temp_Seperated);
+                }
             }
             i++;
         }
@@ -210,9 +217,9 @@ public class TheScanner {
         int found = -1;
         int k = 1;
         String temp = null;
-        while ((k < DFA_NFA.size()) && (found == -1)) {
-            if ((DFA_NFA.get(k).contains("starting")) && (!(DFA_NFA.get(k).contains("alphabet")))) {
-                temp = DFA_NFA.get(k);
+        while ((k < NFA_DFA.size()) && (found == -1)) {
+            if ((NFA_DFA.get(k).contains("starting")) && (!(NFA_DFA.get(k).contains("alphabet")))) {
+                temp = NFA_DFA.get(k);
                 temp = temp.substring(temp.indexOf("=") + 1);
                 temp = temp.substring(0, temp.length() - 1);
                 if (temp.contains("{")) {
@@ -230,11 +237,13 @@ public class TheScanner {
             k++;
         }
 
+        diagram.set_Final_State(diagram.starting_State);
+
         found = -1;
         k = 1;
-        while (k < DFA_NFA.size()) {
-            if ((DFA_NFA.get(k).contains("final")) && (!(DFA_NFA.get(k).contains("alphabet")))) {
-                temp = DFA_NFA.get(k);
+        while (k < NFA_DFA.size()) {
+            if ((NFA_DFA.get(k).contains("final")) && (!(NFA_DFA.get(k).contains("alphabet")))) {
+                temp = NFA_DFA.get(k);
                 temp = temp.substring(temp.indexOf("=") + 1);
                 if (temp.contains("{")) {
                     temp = temp.substring(temp.indexOf("{") + 1);
@@ -263,16 +272,16 @@ public class TheScanner {
         String current;
         String stateId;
         String current_Broken;
-        while (k < DFA_NFA.size()) {
-            if ((DFA_NFA.get(k).contains("transition")) && (!(DFA_NFA.get(k).contains("final")))) {
+        while (k < NFA_DFA.size()) {
+            if ((NFA_DFA.get(k).contains("transition")) && (!(NFA_DFA.get(k).contains("final")))) {
                 found = k;
             }
             k++;
         }
         String temp = "";
 
-        while (found < DFA_NFA.size()) {
-            temp = temp + " " + DFA_NFA.get(found);
+        while (found < NFA_DFA.size()) {
+            temp = temp + " " + NFA_DFA.get(found);
             found++;
         }
 
@@ -319,15 +328,25 @@ public class TheScanner {
              */
         }
     }
-     
-    public void testing_Strings(){
-        String correction=null;
-        for(int i=0;i<the_Strings.size();i++){
+
+    public void testing_Strings() {
+        String correction = null;
+        for (int i = 0; i < the_Strings.size(); i++) {
             //System.out.println(the_Strings.get(i));
-            correction=diagram.string_Validation_Check(the_Strings.get(i)); 
-            System.out.println(correction+"\n");
+            correction = diagram.string_Validation_Check(the_Strings.get(i));
+            System.out.println(correction + "\n" + "-------------------------------------" + "\n");
         }
     }
-    
-    
+
+    /*
+    //WARNING: implement this method if there is time and cut down on memory consumption
+    public void NFA_To_DFA_Seperate() {
+    if (diagram.is_This_An_NFA_Diagram() == true) {
+    //NFA_diagram=diagram;
+    }
+    }
+     */
+    public void NFA_TO_DFA_Converter() {
+        //diagram.empty_All();
+    }
 }
