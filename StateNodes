@@ -1,23 +1,30 @@
+
 import java.util.ArrayList;
 
 public class StateNodes {
 
     ArrayList<String> stateConections = new ArrayList<String>();
+    ArrayList<String> NFA_States = new ArrayList<String>();
     String stateID = null;
     Boolean is_A_Final_State = false;
     Boolean is_A_Start_State = false;
     Boolean is_The_Sink_State = false;
     Boolean this_Diagram_Is_An_NFA = false;
+    Boolean NFA_e_Trans_Done = false;
 
     //WARNING: test to make sure this works
     public StateNodes(String stateId) {
         stateID = stateId;
     }
 
+    public void set_State_ID(String stateId) {
+        stateID = stateId;
+    }
+
     /*
-     public void set_ID(String stateId) {
-     stateID = stateId;
-     }*/
+    public void set_ID(String stateId) {
+    stateID = stateId;
+    }*/
     /**
      * This method returns the current state nodes identification string
      *
@@ -78,6 +85,7 @@ public class StateNodes {
      * @param connection
      * @return this_Diagram_Is_An_NFA
      */
+    //WARNING: MOVE "e" TO LAST
     public Boolean add_Connection(String element, String connection) {
         if (element.equals("e")) {
             this_Diagram_Is_An_NFA = true;
@@ -86,28 +94,34 @@ public class StateNodes {
         stateConections.add(temp);
         return this_Diagram_Is_An_NFA;
     }
-    
-    //this method searches for a connection and returns either the stateId of the found connection or "false" for unfound connection
-    public String find_Connection(String element){
-        Boolean found=false;
+
+    public String find_Connection_DFA(String element) {
+        Boolean found = false;
         String temp;
-        int i=0;
-        while((i<stateConections.size())&&(found==false)){
-            temp=stateConections.get(i);
-            temp=temp.substring(0,1);
-            if(temp.equals(element)){
-                found=true;
-                //System.out.println("true");
-            }
-            if(found==false){
-            i++;}
+        int i = 0;
+        if (stateConections.isEmpty()) {
+            return "false";
         }
-        if(found==true){
-            element=stateConections.get(i);
-            element=element.substring(1);
-            System.out.println("connection found from: "+stateID+" to: "+element);
+        while ((i < stateConections.size()) && (found == false)) {
+            temp = stateConections.get(i);
+            temp = temp.substring(0, 1);
+            if (temp.equals(element)) {
+                found = true;
+            }
+            if (found == false) {
+                i++;
+            }
+        }
+        if (found == true) {
+            element = stateConections.get(i);
+            element = element.substring(1);
+            //System.out.println("connection found from: " + stateID + " to: " + element);
             return element;
         }
         return "false";
+    }
+
+    public void add_NFA_StateIds(String stateId) {
+        NFA_States.add(stateId);
     }
 }
