@@ -1,10 +1,12 @@
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class States {
 
     ArrayList<StateNodes> states = new ArrayList<StateNodes>();
     ArrayList<StateNodes> NFA_State_Nodes = new ArrayList<StateNodes>();
+    ArrayList<StateNodes> diagram_Sort = new ArrayList<StateNodes>();
     ArrayList<String> final_States = new ArrayList<String>();
     ArrayList<String> state_Elements = new ArrayList<String>();
     ArrayList<Integer> final_States_Location = new ArrayList<Integer>();
@@ -12,6 +14,8 @@ public class States {
     String starting_State = null;
     int number_Of_Elements = 0;
     Integer starting_State_Location = -1;
+    int the_Tracker = 0;
+    int racer = 2;
 
     public States() {
     }
@@ -21,11 +25,14 @@ public class States {
      * @param stateId
      * @return stateLocation
      */
-    public int find_An_Existing_State(String stateId) {
+    public int find_An_Existing_State(String stateId, ArrayList<StateNodes> node) {
         int stateLocation = -1;
         String temp;
-        for (int i = 0; i < states.size(); i++) {
-            temp = states.get(i).return_ID();
+        for (int i = 0; i < node.size(); i++) {
+            temp = node.get(i).return_ID();
+            if (temp.contains(",")) {
+                temp = temp.substring(0, temp.indexOf(","));
+            }
             if (temp.equals(stateId)) {
                 stateLocation = i;
             }
@@ -61,7 +68,7 @@ public class States {
      * @param connection
      */
     public void add_A_Connection(String stateId, String element, String connection) {
-        int stateLocation = find_An_Existing_State(stateId);
+        int stateLocation = find_An_Existing_State(stateId, states);
         if (stateLocation == -1) {
             System.out.println("falure");
             return;
@@ -109,7 +116,7 @@ public class States {
      * @param stateId
      */
     public void set_Starting_State(String stateId) {
-        int stateLocation = find_An_Existing_State(stateId);
+        int stateLocation = find_An_Existing_State(stateId, states);
         if (stateLocation == -1) {
             return;
         }
@@ -123,7 +130,7 @@ public class States {
      * 
      */
     public void print_Starting_State() {
-        System.out.println("The starting state is: " + starting_State);
+        System.out.println("The starting state is: " + states.get(starting_State_Location).stateID + " and is located at: " + starting_State_Location);
     }
 
     //WARNING: must put in a loop for this method in scanner to cover all possible final states
@@ -132,7 +139,7 @@ public class States {
      * @param stateId
      */
     public void set_Final_State(String stateId) {
-        int stateLocation = find_An_Existing_State(stateId);
+        int stateLocation = find_An_Existing_State(stateId, states);
         if (stateLocation == -1) {
             return;
         }
@@ -150,7 +157,9 @@ public class States {
     public void print_Final_State() {
         System.out.println("The final states for this diagram are: ");
         for (int i = 0; i < final_States.size(); i++) {
-            System.out.print(final_States.get(i) + "\t");
+            int locate = find_An_Existing_State(final_States.get(i), states);
+            System.out.println("Final state: " + final_States.get(i) + " found at: " + locate);
+            //System.out.print(final_States.get(i) + "\t");
         }
     }
 
@@ -167,7 +176,7 @@ public class States {
     //this method is done need find_Connection method
     public String find_Existing_Connection(String strings, int location, String stateId) {
 
-        int locate = find_An_Existing_State(stateId);
+        int locate = find_An_Existing_State(stateId, states);
         stateId = states.get(locate).find_Connection_DFA(strings.substring(location, location + 1));
         //the string is rejected
         if (stateId.equals("false")) {
@@ -203,6 +212,20 @@ public class States {
             }
         }
     }
+
+    //WARNING: delete this method
+    public void print_SORTER() {
+
+        System.out.println("\n" + "Printing all states and connections now: ");
+        for (int i = 0; i < diagram_Sort.size(); i++) {
+            System.out.println("\n" + "Current state: " + diagram_Sort.get(i).return_ID() + " and its connections are: " + "\t");
+            for (int t = 0; t < diagram_Sort.get(i).stateConections.size(); t++) {
+                String temp = diagram_Sort.get(i).stateConections.get(t);
+                System.out.print(temp.charAt(0) + " connected to: " + temp.substring(1) + "\n");
+            }
+        }
+    }
+
     /*
     public void empty_All() {
     is_This_An_NFA = false;
@@ -213,15 +236,13 @@ public class States {
     }
     final_States.clear();
     }*/
-
     public void print_NFA_Connections() {
 
         System.out.println("\n" + "Printing all NFA connections now: ");
         for (int i = 0; i < states.size(); i++) {
             System.out.println("\n" + "Current state: " + states.get(i).return_ID() + " and its NFA connections are: " + "\t");
             for (int t = 0; t < states.get(i).NFA_States.size(); t++) {
-                String temp = states.get(i).NFA_States.get(t);
-                System.out.print(temp.charAt(0) + " connected to: " + temp.substring(1) + "\n");
+                System.out.print(states.get(i).NFA_States.get(t));
             }
         }
     }
@@ -258,7 +279,7 @@ public class States {
 
             if (input_Type == 0) {
                 states.get(tracker).add_NFA_StateIds(next_State);
-                connected_State_Location = find_An_Existing_State(next_State);
+                connected_State_Location = find_An_Existing_State(next_State, states);
 
                 //recurssion
                 the_Converter_Helper(connected_State_Location, tracker, search_Value, input_Type);
@@ -283,8 +304,13 @@ public class States {
     }
 
     public void print_NFA_Nodes() {
+        System.out.println("\n" + "Printing all NFA to DFA states and connections now: ");
         for (int i = 0; i < NFA_State_Nodes.size(); i++) {
-            System.out.println(NFA_State_Nodes.get(i).return_ID());
+            System.out.println("\n" + "Current state: " + NFA_State_Nodes.get(i).return_ID() + " and its connections are: " + "\t");
+            for (int t = 0; t < NFA_State_Nodes.get(i).stateConections.size(); t++) {
+                String temp = NFA_State_Nodes.get(i).stateConections.get(t);
+                System.out.print(temp.charAt(0) + " connected to: " + temp.substring(1) + "\n");
+            }
         }
     }
 
@@ -293,7 +319,7 @@ public class States {
         for (int i = 0; i < states.size(); i++) {
             for (int t = 0; t < states.get(i).NFA_States.size(); t++) {
                 states.get(i).stateID = states.get(i).stateID + "," + states.get(i).NFA_States.get(t);
-                location = find_An_Existing_State(states.get(i).NFA_States.get(t));
+                location = find_An_Existing_State(states.get(i).NFA_States.get(t), states);
 
                 for (int k = 0; k < states.get(location).stateConections.size(); k++) {
                     String element = states.get(location).stateConections.get(k);
@@ -302,25 +328,250 @@ public class States {
                     connection = connection.substring(1);
                     states.get(i).add_Connection(element, connection);
                 }
-                states.remove(location);
+                // states.remove(location);
             }
         }
+        remove_Connection_From_All("e");
+        sort_Connections(states);
+        Matching_Connections_For_All(states);
+    }
+
+    public void remove_Connection_From_All(String element) {
         for (int j = 0; j < states.size(); j++) {
-            remove_e_Trans(j);
+            remove_Connection_From_One(j, element);
         }
     }
 
-    public void remove_e_Trans(int j) {
-        for (int k = 0; k < states.get(j).stateConections.size(); k++) {
-            String element = states.get(j).stateConections.get(k);
-            element = element.substring(0, 1);
-            if (element.equals("e")) {
-                states.get(j).stateConections.remove(k);
-                remove_e_Trans(j);
+    public void remove_Connection_From_One(int state, String element) {
+        for (int k = 0; k < states.get(state).stateConections.size(); k++) {
+            String temp = states.get(state).stateConections.get(k);
+            temp = temp.substring(0, 1);
+            if (temp.equals(element)) {
+                states.get(state).stateConections.remove(k);
+                remove_Connection_From_One(state, element);
             }
         }
     }
 
-    public void build_NFA_States_Helper(int locate) {
+    public void sort_States(ArrayList<StateNodes> node) {
+        ArrayList<String> connections = new ArrayList<String>();
+        String state;
+        int location;
+        for (int i = 1; i < node.size(); i++) {
+            connections.add(node.get(i).stateID);
+        }
+        Collections.sort(connections);
+        connections.add(0, "{}");
+        for (int i = 0; i < connections.size(); i++) {
+            int locate = find_An_Existing_State(connections.get(i), node);
+            diagram_Sort.add(new StateNodes(connections.get(i)));
+            for (int t = 0; t < node.get(locate).stateConections.size(); t++) {
+                String temp = node.get(locate).stateConections.get(t);
+                diagram_Sort.get(i).add_Connection(temp.substring(0, 1), temp.substring(1));
+            }
+        }
+
+        node.clear();
+
+        for (int i = 0; i < diagram_Sort.size(); i++) {
+            node.add(new StateNodes(diagram_Sort.get(i).stateID));
+            for (int t = 0; t < diagram_Sort.get(i).stateConections.size(); t++) {
+                String temp = diagram_Sort.get(i).stateConections.get(t);
+                node.get(i).add_Connection(temp.substring(0, 1), temp.substring(1));
+            }
+        }
+
+        diagram_Sort.clear();
+        sort_Connections(node);
+    }
+
+    public void sort_Connections(ArrayList<StateNodes> node) {
+
+        for (int j = 0; j < node.size(); j++) {
+            Collections.sort(node.get(j).stateConections);
+        }
+
+        for (int j = 0; j < node.size(); j++) {
+            Collections.sort(node.get(j).NFA_States);
+        }
+        for (int j = 0; j < node.size(); j++) {
+            Collections.sort(node.get(j).NFA_States_Holder);
+        }
+    }
+
+    public void Matching_Connections_For_All(ArrayList<StateNodes> nodes) {
+        for (int i = 0; i < nodes.size(); i++) {
+            for (int k = 0; k < nodes.get(i).stateConections.size(); k++) {
+
+                if (k != 0) {
+
+                    String last_State = nodes.get(i).stateConections.get(k - 1);
+                    last_State = last_State.substring(0, 1);
+
+
+                    String current_State = nodes.get(i).stateConections.get(k);
+                    current_State = current_State.substring(0, 1);
+
+                    if (current_State.equals(last_State)) {
+
+                        current_State = nodes.get(i).stateConections.get(k);
+                        last_State = nodes.get(i).stateConections.get(k - 1);
+                        current_State = current_State.substring(1);
+                        if (!(last_State.substring(1).equals(current_State))) {
+
+                            last_State = last_State + "," + current_State;
+
+                            nodes.get(i).stateConections.add(k - 1, last_State);
+                            nodes.get(i).stateConections.remove(k);
+                            nodes.get(i).stateConections.remove(k);
+                        } else {
+                            //WARNING::::::::::::::::::::::::::this maybe be k-1 or k+1
+                            nodes.get(i).stateConections.remove(k);
+                        }
+                        k = k - 1;
+                    }
+                }
+            }
+        }
+    }
+
+    public void build_NFA() {
+        add_NFA_State(starting_State_Location);
+        build_NFA_Helper(NFA_State_Nodes.size());
+    }
+
+    public void build_NFA_Helper(int location) {
+        do {
+            NFA_New_States();
+            only_Linear();
+            location++;
+        } while (location < NFA_State_Nodes.size());
+    }
+
+    public void only_Linear() {
+        while (racer < NFA_State_Nodes.size()) {
+            NFA_Combine_States(racer);
+            racer++;
+        }
+        sort_Connections(NFA_State_Nodes);
+        Matching_Connections_For_All(NFA_State_Nodes);
+        remove_Repeating_States(NFA_State_Nodes);
+    }
+
+    //WARNING: NOT TESTED
+    public void remove_Repeating_States(ArrayList<StateNodes> nodes) {
+        for (int i = 1; i < NFA_State_Nodes.size(); i++) {
+            String last_State = nodes.get(i).stateID;
+            String current_State = nodes.get(i - 1).stateID;
+            if (current_State.equals(last_State)) {
+                nodes.remove(i);
+            }
+        }
+    }
+
+    public void NFA_Combine_States(int h) {
+        if (NFA_State_Nodes.get(h).NFA_States_Holder.isEmpty()) {
+            int location = find_An_Existing_State(NFA_State_Nodes.get(h).stateID, states);
+            for (int i = 0; i < states.get(location).stateConections.size(); i++) {
+                String temp = states.get(location).stateConections.get(i);
+                NFA_State_Nodes.get(h).add_Connection(temp.substring(0, 1), temp.substring(1));
+            }
+        }
+        for (int z = 0; z < NFA_State_Nodes.get(h).NFA_States_Holder.size(); z++) {
+            String value = NFA_State_Nodes.get(h).NFA_States_Holder.get(z);
+            int location = find_An_Existing_State(value, states);
+            for (int i = 0; i < states.get(location).stateConections.size(); i++) {
+                String temp = states.get(location).stateConections.get(i);
+                NFA_State_Nodes.get(h).add_Connection(temp.substring(0, 1), temp.substring(1));
+            }
+            for (int t = 0; t < states.get(location).NFA_States.size(); t++) {
+                NFA_State_Nodes.get(h).NFA_States_Holder.add(states.get(location).NFA_States.get(t));
+            }
+
+        }
+        change_NFA_State_Id(h);
+        String stateId = NFA_State_Nodes.get(h).stateID;
+        if (NFA_State_Nodes.get(h).NFA_States_Holder.isEmpty()) {
+            int location = find_An_Existing_State(NFA_State_Nodes.get(h).stateID, states);
+            stateId = states.get(location).stateID;
+        }
+        for (int j = 0; j < NFA_State_Nodes.get(h).NFA_States_Holder.size(); j++) {
+            if (j == 0) {
+                return;
+            }
+            stateId = stateId + "," + NFA_State_Nodes.get(h).NFA_States_Holder.get(j);
+        }
+        NFA_State_Nodes.get(h).stateID = stateId;
+    }
+
+    public void change_NFA_State_Id(int h) {
+        Collections.sort(NFA_State_Nodes.get(h).NFA_States_Holder);
+        for (int i = 1; i < NFA_State_Nodes.get(h).NFA_States_Holder.size(); i++) {
+            if (NFA_State_Nodes.get(h).NFA_States_Holder.get(i - 1).equals(NFA_State_Nodes.get(h).NFA_States_Holder.get(i))) {
+                NFA_State_Nodes.get(h).NFA_States_Holder.remove(i);
+                i = i - 1;
+            }
+        }
+        String temp = "";
+        if (NFA_State_Nodes.get(h).NFA_States_Holder.isEmpty()) {
+            temp = NFA_State_Nodes.get(h).stateID;
+        }
+        //System.out.println("the node is: "+NFA_State_Nodes.get(location).stateID+ " and: "+ temp);
+        for (int t = 0; t < NFA_State_Nodes.get(h).NFA_States_Holder.size(); t++) {
+            if (t == 0) {
+                temp = temp + NFA_State_Nodes.get(h).NFA_States_Holder.get(t);
+
+            } else {
+                temp = temp + "," + NFA_State_Nodes.get(h).NFA_States_Holder.get(t);
+                //System.out.println(NFA_State_Nodes.get(location).NFA_States_Holder.get(t)+" and: "+temp);
+            }
+        }
+        //System.out.println("+++++++++++++++++: "+temp);
+        NFA_State_Nodes.get(h).stateID = temp;
+    }
+
+    public void NFA_New_States() {
+        the_Tracker++;
+        for (int i = 0; i < NFA_State_Nodes.get(the_Tracker).stateConections.size(); i++) {
+            String connection = NFA_State_Nodes.get(the_Tracker).stateConections.get(i);
+            connection = connection.substring(1);
+            if (find_An_Existing_State(connection, NFA_State_Nodes) == -1) {
+                NFA_State_Nodes.add(new StateNodes(connection));
+                NFA_States_Holder(connection, NFA_State_Nodes.size() - 1);
+            }
+        }
+    }
+
+    public void NFA_States_Holder(String connection, int location) {
+        if (!(connection.contains(","))) {
+            return;
+        }
+        String temp;
+        while (connection.contains(",")) {
+            temp = connection.substring(0, connection.indexOf(","));
+            connection = connection.substring(connection.indexOf(",") + 1);
+            NFA_State_Nodes.get(location).NFA_States_Holder.add(temp);
+        }
+        NFA_State_Nodes.get(location).NFA_States_Holder.add(connection);
+    }
+
+    public void print_NFA_States_Holder() {
+        for (int t = 0; t < NFA_State_Nodes.size(); t++) {
+            System.out.println("The current state is: " + NFA_State_Nodes.get(t).stateID);
+            for (int i = 0; i < NFA_State_Nodes.get(t).NFA_States_Holder.size(); i++) {
+                System.out.println(NFA_State_Nodes.get(t).NFA_States_Holder.get(i));
+            }
+        }
+    }
+
+    public void add_NFA_State(int location) {
+        String stateId = states.get(location).stateID;
+        NFA_State_Nodes.add(new StateNodes(stateId));
+        for (int i = 0; i < states.get(location).stateConections.size(); i++) {
+            String element = states.get(location).stateConections.get(i);
+            String connection = element.substring(1);
+            element = element.substring(0, 1);
+            NFA_State_Nodes.get(NFA_State_Nodes.size() - 1).add_Connection(element, connection);
+        }
     }
 }
