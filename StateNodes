@@ -4,7 +4,9 @@ import java.util.ArrayList;
 public class StateNodes {
 
     ArrayList<String> stateConections = new ArrayList<String>();
+    ArrayList<String> NFA_States_Holder = new ArrayList<String>();
     ArrayList<String> NFA_States = new ArrayList<String>();
+    ArrayList<String> NFA_Holding = new ArrayList<String>();
     String stateID = null;
     Boolean is_A_Final_State = false;
     Boolean is_A_Start_State = false;
