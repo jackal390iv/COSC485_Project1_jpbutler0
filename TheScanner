@@ -29,13 +29,9 @@ public class TheScanner {
 
         data_Entry(1);
 
-        designate_Starting_And_Final_States();
-
-
-
         designate_State_Connections();
 
-
+        designate_Starting_And_Final_States();
 
 
         System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
@@ -52,48 +48,63 @@ public class TheScanner {
         System.out.println("\n");
 
 
+
+
+
         System.out.println("\n" + "Original Connections:" + "\n" + "-------------------------------");
 
         diagram.print_States_And_Connections();
 
         System.out.println("-------------------------------");
 
+        diagram.print_NFA_Nodes();
+
+        System.out.println("-------------------------------");
 
 
 
 
         if (diagram.is_This_An_NFA_Diagram() == true) {
+
+
             diagram.the_Converter();
+
+
+            System.out.println("\n" + "(e-Trans are found in the NFA_States/StateNodes):" + "\n" + "-------------------------------");
 
             diagram.print_e_Trans();
 
             System.out.println("\n" + "-------------------------------");
 
+
             diagram.build_NFA_States();
 
 
-
-            System.out.println("\n" + "NFA Connections:" + "\n" + "-------------------------------");
+            System.out.println("\n" + "NFA Original (No e-Trans):" + "\n" + "-------------------------------");
 
             diagram.print_States_And_Connections();
 
-            /*
-            
-            System.out.println("\n" + "Original Starting & Final States:" + "\n" + "-------------------------------");
-            
-            diagram.print_Starting_State();
-            System.out.println();
-            
-            diagram.print_Final_State();
-            System.out.println("\n");
-            
-            
-            System.out.println("\n" + "Original Connections:" + "\n" + "-------------------------------");
-            
-            diagram.print_States_And_Connections();
-            
-            System.out.println("-------------------------------" + "\n");
-             */
+            System.out.println("\n" + "-------------------------------");
+
+            diagram.build_NFA();
+
+
+
+            System.out.println("\n" + "NFA Built Connections (Using NFA_Nodes):" + "\n" + "-------------------------------");
+
+            diagram.print_NFA_Nodes();
+
+            //diagram.print_NFA_Connections();
+
+            //System.out.println("\n" + "-------------------------------");
+            //System.out.println("\n" + "-------------------------------");
+
+            //diagram.print_NFA_States_Holder();
+
+
+
+
+
 
         }
 
@@ -223,9 +234,14 @@ public class TheScanner {
                 temp = temp.substring(temp.indexOf("=") + 1);
                 temp = temp.substring(0, temp.length() - 1);
                 if (temp.contains("{")) {
-                    temp = temp.substring(temp.indexOf("{") + 1);
-                    temp = temp.trim();
-                    temp = temp.substring(0, temp.length() - 2);
+                    temp.replace("{", "");
+                }
+                if (temp.contains("}")) {
+                    temp.replace("}", "");
+                }
+                if (temp.contains(",")) {
+
+                    temp.replace(",", "");
                 }
                 temp = temp.trim();
                 if (temp.equals("")) {
@@ -236,28 +252,44 @@ public class TheScanner {
             }
             k++;
         }
-
-        diagram.set_Final_State(diagram.starting_State);
-
         found = -1;
         k = 1;
         while (k < NFA_DFA.size()) {
             if ((NFA_DFA.get(k).contains("final")) && (!(NFA_DFA.get(k).contains("alphabet")))) {
                 temp = NFA_DFA.get(k);
                 temp = temp.substring(temp.indexOf("=") + 1);
-                if (temp.contains("{")) {
-                    temp = temp.substring(temp.indexOf("{") + 1);
-                    temp = temp.trim();
-                    temp = temp.substring(0, temp.length() - 2);
-                }
-                temp = temp.trim();
-                if (temp.equals("")) {
-                    temp = " ";
-                }
-                diagram.set_Final_State(temp);
                 found = k;
             }
             k++;
+        }
+        designate_Final_States(temp);
+    }
+
+    public void designate_Final_States(String temp) {
+        if (temp.contains(",")) {
+            String part = temp;
+            part = part.substring(0, part.indexOf(","));
+
+            if (part.contains("{")) {
+                part = part.substring(part.indexOf("{") + 1);
+            }
+            if (part.contains("}")) {
+                part = part.substring(0, part.indexOf("}"));
+            }
+            part = part.trim();
+            if (part.equals("")) {
+                part = " ";
+            }
+            diagram.set_Final_State(part);
+            temp = temp.substring(temp.indexOf(",") + 1);
+            temp = temp.trim();
+            if (temp.equals("")) {
+                temp = " ";
+            }
+            if (temp.contains(",")) {
+                designate_Final_States(temp);
+            }
+            return;
         }
     }
 
@@ -327,6 +359,8 @@ public class TheScanner {
             System.out.println(connection);
              */
         }
+        diagram.sort_States(diagram.states);
+        //diagram.sort_Connections();
     }
 
     public void testing_Strings() {
