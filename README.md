@@ -1,4 +1,4 @@
-COSC485_Project1_
+COSC485_Project1_jpbutler0
 ==========================
 Description: DFA/NFA
 Name: Jon
