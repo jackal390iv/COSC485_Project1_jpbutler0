@@ -1,0 +1,27 @@
+
+M = { States, Alphabet, Transition Functions, Starting State, Final States }
+
+where, 
+
+States = {  q5, q3, q1, q4, q2 }, 
+
+Alphabet = { a, b }, 
+
+Starting State = q1, 
+
+Final States = { q5 },
+
+Transition Functions = {
+	( q1, a, q2 ),
+	( q1, b, q3 ),
+
+	( q2, a, q1 ),
+	( q2, b, q4 ),
+
+	( q3, a, q4 ),
+
+	( q4, a, q5 ),
+	( q4, b, q5 ),
+
+	( q5, a, q5 ),
+}
