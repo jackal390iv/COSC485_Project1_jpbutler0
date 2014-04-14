@@ -94,8 +94,10 @@ public class TheScanner {
     }
 
     /**
+     * reads DFA/NFA and Strings text files and imports them into ArrayLists
      *
      * @param choice
+     * @param location_Txt
      */
     public void reader(int choice, String location_Txt) {
         try {
@@ -120,6 +122,9 @@ public class TheScanner {
         }
     }
 
+    /**
+     * prints the NFA/DFA text file ArrayList
+     */
     public void print_NFA_DFA() {
         System.out.println("The following is the ArrayList for the DFA.txt: ");
         for (int i = 0; i < NFA_DFA.size(); i++) {
@@ -128,7 +133,9 @@ public class TheScanner {
         System.out.println();
     }
 
-    //WARNING: must change variable for actual pathing txt file ArryayList
+    /**
+     * prints the Strings text file ArrayList
+     */
     public void print_String() {
         System.out.println("The following is the ArrayList for the String.txt: ");
         for (int i = 0; i < the_Strings.size(); i++) {
@@ -137,6 +144,11 @@ public class TheScanner {
         System.out.println();
     }
 
+    /**
+     * creates states from DFA/NFA text file and import them to the States class
+     *
+     * @param type
+     */
     public void data_Entry(int type) {
         if (type == 0) {
             diagram.create_Sink_State();
@@ -205,6 +217,10 @@ public class TheScanner {
         }
     }
 
+    /**
+     * designates the starting and final states from DFA/NFA text file and
+     * import them to the States class
+     */
     public void designate_Starting_And_Final_States() {
 
         int found = -1;
@@ -248,6 +264,11 @@ public class TheScanner {
         designate_Final_States(temp);
     }
 
+    /**
+     * designates the final states
+     *
+     * @param temp
+     */
     public void designate_Final_States(String temp) {
         if (temp.contains(",")) {
             String part = temp;
@@ -276,6 +297,10 @@ public class TheScanner {
         }
     }
 
+    /**
+     * creates state connections from DFA/NFA text file and import them to the
+     * States class
+     */
     public void designate_State_Connections() {
         int found = -1;
         int k = 1;
@@ -346,6 +371,11 @@ public class TheScanner {
         //diagram.sort_Connections();
     }
 
+    /**
+     * tests strings from Strings text file for correctness
+     *
+     * @param node
+     */
     public void testing_Strings(ArrayList<StateNodes> node) {
         String correction = null;
         for (int i = 0; i < the_Strings.size(); i++) {
@@ -356,6 +386,12 @@ public class TheScanner {
         }
     }
 
+    /**
+     * creates and writes tested string at the Answers location
+     *
+     * @param Answers
+     * @throws IOException
+     */
     public void create_Output_Doc(String Answers) throws IOException {
         File file = new File(Answers);
         if (file.exists()) {
