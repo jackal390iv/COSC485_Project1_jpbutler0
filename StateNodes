@@ -24,9 +24,9 @@ public class StateNodes {
     }
 
     /*
-    public void set_ID(String stateId) {
-    stateID = stateId;
-    }*/
+     public void set_ID(String stateId) {
+     stateID = stateId;
+     }*/
     /**
      * This method returns the current state nodes identification string
      *
