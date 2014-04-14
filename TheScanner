@@ -20,6 +20,14 @@ public class TheScanner {
     public TheScanner() {
     }
 
+    /**
+     * main method that compiles the class
+     *
+     * @param DFA_or_NFA
+     * @param Strings
+     * @param Answers
+     * @throws IOException
+     */
     public void userMessage(String DFA_or_NFA, String Strings, String Answers) throws IOException {
 
         // System.out.println(DFA_or_NFA);
