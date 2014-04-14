@@ -43,8 +43,8 @@ public class States {
     }
 
     /**
-     * 
-     * @param element 
+     *
+     * @param element
      */
     public void add_Element(String element) {
         state_Elements.add(element);
@@ -53,7 +53,7 @@ public class States {
 
     //WARNING: I don't think 'elements' is the right word... Nor is diagram...
     /**
-     * 
+     *
      */
     public void print_State_Elements() {
         System.out.println("There are: " + number_Of_Elements + " elements in this diagram.");
@@ -109,10 +109,10 @@ public class States {
     }
 
     /*
-    //WARNING: on second though ignore this step... this makes it to complicated...just check for sink state durring scan
-    public void add_Connection_To_Sink_State(String connection) {
-    states.get(0).add_Connection(connection, "{}");
-    }*/
+     //WARNING: on second though ignore this step... this makes it to complicated...just check for sink state durring scan
+     public void add_Connection_To_Sink_State(String connection) {
+     states.get(0).add_Connection(connection, "{}");
+     }*/
     /**
      *
      * @param stateId
@@ -129,7 +129,7 @@ public class States {
     }
 
     /**
-     * 
+     *
      */
     public void print_Starting_State() {
         System.out.println("The starting state is: " + states.get(starting_State_Location).stateID + " and is located at: " + starting_State_Location);
@@ -154,7 +154,7 @@ public class States {
 
     //WARNING: I don't think diagram is the right word
     /**
-     * 
+     *
      */
     public void print_Final_State() {
         System.out.println("The final states for this diagram are: ");
@@ -199,7 +199,7 @@ public class States {
         }
         if (!(THE_holder.equals("false"))) {
             if ((node.get(find_An_Existing_State(THE_holder, node)).is_A_Final_State == false)) {
-                System.out.println("FAILURE: does not end on final state");
+                //System.out.println("FAILURE: does not end on final state");
                 THIS_ONE = " is rejected";
             } else {
                 THIS_ONE = " is accepted";
@@ -212,12 +212,12 @@ public class States {
     }
 
     /*
-    public String string_Validation_Helper(String element, Integer stateLocation) {
-    String connection = states.get(stateLocation).find_Existing_Connection(element);
-    return connection;
-    }*/
+     public String string_Validation_Helper(String element, Integer stateLocation) {
+     String connection = states.get(stateLocation).find_Existing_Connection(element);
+     return connection;
+     }*/
     /**
-     * 
+     *
      */
     public void print_States_And_Connections() {
 
@@ -245,15 +245,15 @@ public class States {
     }
 
     /*
-    public void empty_All() {
-    is_This_An_NFA = false;
-    starting_State = null;
-    starting_State_Location = -1;
-    for (int i = 0; i < states.size(); i++) {
-    states.get(i).stateConections.clear();
-    }
-    final_States.clear();
-    }*/
+     public void empty_All() {
+     is_This_An_NFA = false;
+     starting_State = null;
+     starting_State_Location = -1;
+     for (int i = 0; i < states.size(); i++) {
+     states.get(i).stateConections.clear();
+     }
+     final_States.clear();
+     }*/
     public void print_NFA_Connections() {
 
         System.out.println("\n" + "Printing all NFA connections now: ");
