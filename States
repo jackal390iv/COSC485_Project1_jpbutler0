@@ -23,9 +23,12 @@ public class States {
     }
 
     /**
+     * Finds an existing state and returns the states location, or returns -1 if
+     * the state doesn't exist
      *
      * @param stateId
-     * @return stateLocation
+     * @param node
+     * @return
      */
     public int find_An_Existing_State(String stateId, ArrayList<StateNodes> node) {
         int stateLocation = -1;
@@ -43,6 +46,7 @@ public class States {
     }
 
     /**
+     * adds elements to sigma
      *
      * @param element
      */
@@ -51,9 +55,8 @@ public class States {
         number_Of_Elements++;
     }
 
-    //WARNING: I don't think 'elements' is the right word... Nor is diagram...
     /**
-     *
+     * Prints the number of elements in the diagram, and what they are
      */
     public void print_State_Elements() {
         System.out.println("There are: " + number_Of_Elements + " elements in this diagram.");
@@ -64,6 +67,7 @@ public class States {
     }
 
     /**
+     * adds a connection to the stateId
      *
      * @param stateId
      * @param element
@@ -82,14 +86,16 @@ public class States {
     }
 
     /**
+     * returns true if the diagram is an NFA
      *
-     * @return is_This_An_NFA
+     * @return
      */
     public Boolean is_This_An_NFA_Diagram() {
         return is_This_An_NFA;
     }
 
     /**
+     * creates a new state
      *
      * @param stateId
      */
@@ -97,9 +103,8 @@ public class States {
         states.add(new StateNodes(stateId));
     }
 
-    //WARNING: must implement the method while readeing dfa.txt
     /**
-     *
+     * creates the sink state
      */
     public void create_Sink_State() {
         states.add(new StateNodes("{}"));
@@ -108,12 +113,8 @@ public class States {
         NFA_State_Nodes.get(0).set_As_The_Sink_State();
     }
 
-    /*
-     //WARNING: on second though ignore this step... this makes it to complicated...just check for sink state durring scan
-     public void add_Connection_To_Sink_State(String connection) {
-     states.get(0).add_Connection(connection, "{}");
-     }*/
     /**
+     * sets starting state
      *
      * @param stateId
      */
@@ -129,14 +130,14 @@ public class States {
     }
 
     /**
-     *
+     * prints starting state
      */
     public void print_Starting_State() {
         System.out.println("The starting state is: " + states.get(starting_State_Location).stateID + " and is located at: " + starting_State_Location);
     }
 
-    //WARNING: must put in a loop for this method in scanner to cover all possible final states
     /**
+     * sets final state/states
      *
      * @param stateId
      */
@@ -152,9 +153,8 @@ public class States {
         states.get(stateLocation).set_As_A_Final_State();
     }
 
-    //WARNING: I don't think diagram is the right word
     /**
-     *
+     * prints final states
      */
     public void print_Final_State() {
         System.out.println("The final states for this diagram are: ");
@@ -166,9 +166,11 @@ public class States {
     }
 
     /**
+     * checks if the string input is possible given the NFA/DFA
      *
-     * @param the_String
-     * @return validation
+     * @param element
+     * @param node
+     * @return
      */
     public String string_Validation_Check(String element, ArrayList<StateNodes> node) {
         element = find_Existing_Connection(element, 0, starting_State, node);  //node);
@@ -176,7 +178,15 @@ public class States {
         return element;
     }
 
-    //this method is done need find_Connection method
+    /**
+     * extention of string_Validation_Check
+     *
+     * @param strings
+     * @param location
+     * @param stateId
+     * @param node
+     * @return
+     */
     public String find_Existing_Connection(String strings, int location, String stateId, ArrayList<StateNodes> node) {
 
         THIS_ONE = strings;
@@ -211,13 +221,8 @@ public class States {
         return strings;
     }
 
-    /*
-     public String string_Validation_Helper(String element, Integer stateLocation) {
-     String connection = states.get(stateLocation).find_Existing_Connection(element);
-     return connection;
-     }*/
     /**
-     *
+     * prints states, states and there connections
      */
     public void print_States_And_Connections() {
 
@@ -231,7 +236,9 @@ public class States {
         }
     }
 
-    //WARNING: delete this method
+    /**
+     * prints diagram_Sort, states and there connections
+     */
     public void print_SORTER() {
 
         System.out.println("\n" + "Printing all states and connections now: ");
@@ -244,16 +251,9 @@ public class States {
         }
     }
 
-    /*
-     public void empty_All() {
-     is_This_An_NFA = false;
-     starting_State = null;
-     starting_State_Location = -1;
-     for (int i = 0; i < states.size(); i++) {
-     states.get(i).stateConections.clear();
-     }
-     final_States.clear();
-     }*/
+    /**
+     * prints NFA_States, states and there connections
+     */
     public void print_NFA_Connections() {
 
         System.out.println("\n" + "Printing all NFA connections now: ");
@@ -265,6 +265,9 @@ public class States {
         }
     }
 
+    /**
+     * prints e-transitions
+     */
     public void print_e_Trans() {
         for (int i = 0; i < states.size(); i++) {
             if (!(states.get(i).NFA_States.isEmpty())) {
@@ -276,14 +279,22 @@ public class States {
         }
     }
 
+    /**
+     * combines e-transition states
+     */
     public void the_Converter() {
-
         //System.out.println("\n" + "Locating epsilon transitions: ");
-
         the_Converter_Helper(starting_State_Location, starting_State_Location, "e", 0);
-
     }
 
+    /**
+     * extends the_Converter
+     *
+     * @param connected_State_Location
+     * @param tracker
+     * @param search_Value
+     * @param input_Type
+     */
     public void the_Converter_Helper(int connected_State_Location, int tracker, String search_Value, int input_Type) {
 
         if (states.get(tracker).NFA_e_Trans_Done == true) {
@@ -321,6 +332,9 @@ public class States {
 
     }
 
+    /**
+     * prints NFA_State_Nodes, states and there connections
+     */
     public void print_NFA_Nodes() {
         System.out.println("\n" + "Printing all NFA to DFA states and connections now: ");
         for (int i = 0; i < NFA_State_Nodes.size(); i++) {
@@ -332,6 +346,9 @@ public class States {
         }
     }
 
+    /**
+     * adds all connections to combined e-transition states
+     */
     public void build_NFA_States() {
         int location;
         for (int i = 0; i < states.size(); i++) {
@@ -354,12 +371,23 @@ public class States {
         Matching_Connections_For_All(states);
     }
 
+    /**
+     * removes connections from all states
+     *
+     * @param element
+     */
     public void remove_Connection_From_All(String element) {
         for (int j = 0; j < states.size(); j++) {
             remove_Connection_From_One(j, element);
         }
     }
 
+    /**
+     * removes connections from one state
+     *
+     * @param state
+     * @param element
+     */
     public void remove_Connection_From_One(int state, String element) {
         for (int k = 0; k < states.get(state).stateConections.size(); k++) {
             String temp = states.get(state).stateConections.get(k);
@@ -371,6 +399,11 @@ public class States {
         }
     }
 
+    /**
+     * sorts all states by stateId
+     *
+     * @param node
+     */
     public void sort_States(ArrayList<StateNodes> node) {
         ArrayList<String> connections = new ArrayList<String>();
         String state;
@@ -403,6 +436,11 @@ public class States {
         sort_Connections(node);
     }
 
+    /**
+     * sorts all state connections
+     *
+     * @param node
+     */
     public void sort_Connections(ArrayList<StateNodes> node) {
 
         for (int j = 0; j < node.size(); j++) {
@@ -417,6 +455,11 @@ public class States {
         }
     }
 
+    /**
+     * combines matching connections for all states
+     *
+     * @param nodes
+     */
     public void Matching_Connections_For_All(ArrayList<StateNodes> nodes) {
         for (int i = 0; i < nodes.size(); i++) {
             for (int k = 0; k < nodes.get(i).stateConections.size(); k++) {
@@ -453,6 +496,9 @@ public class States {
         }
     }
 
+    /**
+     * builds NFA from e-transition combined states
+     */
     public void build_NFA() {
         add_NFA_State(starting_State_Location);
         build_NFA_Helper(NFA_State_Nodes.size());
@@ -467,6 +513,9 @@ public class States {
         } while (location < NFA_State_Nodes.size());
     }
 
+    /**
+     * extends build_NFA_Helper
+     */
     public void only_Linear() {
         while (racer < NFA_State_Nodes.size()) {
             NFA_Combine_States(racer);
@@ -477,7 +526,11 @@ public class States {
         remove_Repeating_States(NFA_State_Nodes);
     }
 
-    //WARNING: NOT TESTED
+    /**
+     * removes any repeating stateID's
+     *
+     * @param nodes
+     */
     public void remove_Repeating_States(ArrayList<StateNodes> nodes) {
         for (int i = 1; i < NFA_State_Nodes.size(); i++) {
             String last_State = nodes.get(i).stateID;
@@ -488,6 +541,11 @@ public class States {
         }
     }
 
+    /**
+     * extends build_NFA_Helper
+     *
+     * @param h
+     */
     public void NFA_Combine_States(int h) {
         if (NFA_State_Nodes.get(h).NFA_States_Holder.isEmpty()) {
             int location = find_An_Existing_State(NFA_State_Nodes.get(h).stateID, states);
@@ -523,6 +581,11 @@ public class States {
         NFA_State_Nodes.get(h).stateID = stateId;
     }
 
+    /**
+     * extends build_NFA_Helper
+     *
+     * @param h
+     */
     public void change_NFA_State_Id(int h) {
         Collections.sort(NFA_State_Nodes.get(h).NFA_States_Holder);
         for (int i = 1; i < NFA_State_Nodes.get(h).NFA_States_Holder.size(); i++) {
@@ -549,6 +612,9 @@ public class States {
         NFA_State_Nodes.get(h).stateID = temp;
     }
 
+    /**
+     * extends build_NFA_Helper
+     */
     public void NFA_New_States() {
         the_Tracker++;
         for (int i = 0; i < NFA_State_Nodes.get(the_Tracker).stateConections.size(); i++) {
@@ -561,6 +627,12 @@ public class States {
         }
     }
 
+    /**
+     * extends build_NFA_Helper
+     *
+     * @param connection
+     * @param location
+     */
     public void NFA_States_Holder(String connection, int location) {
         if (!(connection.contains(","))) {
             return;
@@ -574,6 +646,9 @@ public class States {
         NFA_State_Nodes.get(location).NFA_States_Holder.add(connection);
     }
 
+    /**
+     * prints NFA_State_Nodes, states and there connections
+     */
     public void print_NFA_States_Holder() {
         for (int t = 0; t < NFA_State_Nodes.size(); t++) {
             System.out.println("The current state is: " + NFA_State_Nodes.get(t).stateID);
@@ -583,6 +658,11 @@ public class States {
         }
     }
 
+    /**
+     * extends build_NFA_Helper
+     *
+     * @param location
+     */
     public void add_NFA_State(int location) {
         String stateId = states.get(location).stateID;
         NFA_State_Nodes.add(new StateNodes(stateId));
@@ -594,6 +674,9 @@ public class States {
         }
     }
 
+    /**
+     * sets final states for NFA_State_Nodes
+     */
     public void set_Final_NFA_States() {
         for (int i = 0; i < NFA_State_Nodes.size(); i++) {
             String temp = NFA_State_Nodes.get(i).stateID;
