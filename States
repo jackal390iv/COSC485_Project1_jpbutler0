@@ -16,6 +16,8 @@ public class States {
     Integer starting_State_Location = -1;
     int the_Tracker = 0;
     int racer = 2;
+    String THE_holder;
+    String THIS_ONE = "no";
 
     public States() {
     }
@@ -168,28 +170,44 @@ public class States {
      * @param the_String
      * @return validation
      */
-    public String string_Validation_Check(String element) {
-        element = find_Existing_Connection(element, 0, starting_State);
+    public String string_Validation_Check(String element, ArrayList<StateNodes> node) {
+        element = find_Existing_Connection(element, 0, starting_State, node);  //node);
+        element = element + THIS_ONE;
         return element;
     }
 
     //this method is done need find_Connection method
-    public String find_Existing_Connection(String strings, int location, String stateId) {
+    public String find_Existing_Connection(String strings, int location, String stateId, ArrayList<StateNodes> node) {
 
-        int locate = find_An_Existing_State(stateId, states);
-        stateId = states.get(locate).find_Connection_DFA(strings.substring(location, location + 1));
-        //the string is rejected
-        if (stateId.equals("false")) {
-            strings = strings + " is rejected";
-            return strings;
-        } //recursion for next element in the string
-        else if (location + 1 < strings.length()) {
-            location++;
-            find_Existing_Connection(strings, location, stateId);
+        THIS_ONE = strings;
+        int locate = find_An_Existing_State(stateId, node);
+        stateId = node.get(locate).find_Connection_DFA(strings.substring(location, location + 1));
+        if (stateId.contains(",")) {
+            stateId = stateId.substring(0, stateId.indexOf(","));
         }
-
+        THE_holder = stateId;
+        //the string is rejected
+        //System.out.println("stateID: "+THE_holder);
+        if (stateId.equals("false")) {
+            //System.out.println("FAILURE: connection not found");
+            THIS_ONE = " is rejected";
+        } //recursion for next element in the string
+        else if ((location + 1) != strings.length()) {
+            location++;
+            //System.out.println("location: "+location+" string length: "+ strings.length());
+            find_Existing_Connection(strings, location, stateId, node);
+        }
+        if (!(THE_holder.equals("false"))) {
+            if ((node.get(find_An_Existing_State(THE_holder, node)).is_A_Final_State == false)) {
+                System.out.println("FAILURE: does not end on final state");
+                THIS_ONE = " is rejected";
+            } else {
+                THIS_ONE = " is accepted";
+            }
+        } else {
+            THIS_ONE = " is rejected";
+        }
         //if it makes it here the string is accepted
-        strings = strings + " is accepted";
         return strings;
     }
 
@@ -260,7 +278,7 @@ public class States {
 
     public void the_Converter() {
 
-        System.out.println("\n" + "Locating epsilon transitions: ");
+        //System.out.println("\n" + "Locating epsilon transitions: ");
 
         the_Converter_Helper(starting_State_Location, starting_State_Location, "e", 0);
 
@@ -438,6 +456,7 @@ public class States {
     public void build_NFA() {
         add_NFA_State(starting_State_Location);
         build_NFA_Helper(NFA_State_Nodes.size());
+        set_Final_NFA_States();
     }
 
     public void build_NFA_Helper(int location) {
@@ -572,6 +591,17 @@ public class States {
             String connection = element.substring(1);
             element = element.substring(0, 1);
             NFA_State_Nodes.get(NFA_State_Nodes.size() - 1).add_Connection(element, connection);
+        }
+    }
+
+    public void set_Final_NFA_States() {
+        for (int i = 0; i < NFA_State_Nodes.size(); i++) {
+            String temp = NFA_State_Nodes.get(i).stateID;
+            for (int t = 0; t < final_States.size(); t++) {
+                if (temp.contains(final_States.get(t))) {
+                    NFA_State_Nodes.get(i).set_As_A_Final_State();
+                }
+            }
         }
     }
 }
