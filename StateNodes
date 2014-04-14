@@ -14,21 +14,24 @@ public class StateNodes {
     Boolean this_Diagram_Is_An_NFA = false;
     Boolean NFA_e_Trans_Done = false;
 
-    //WARNING: test to make sure this works
+    /**
+     * This class assigns stateID upon construction
+     */
     public StateNodes(String stateId) {
         stateID = stateId;
     }
 
+    /**
+     * Sets the stateID
+     *
+     * @param stateId
+     */
     public void set_State_ID(String stateId) {
         stateID = stateId;
     }
 
-    /*
-     public void set_ID(String stateId) {
-     stateID = stateId;
-     }*/
     /**
-     * This method returns the current state nodes identification string
+     * Returns the current state nodes identification string
      *
      * @return stateID
      */
@@ -37,27 +40,28 @@ public class StateNodes {
     }
 
     /**
-     * This method designates the currect state node as a final state
+     * Designates the current state node as a final state
      */
     public void set_As_A_Final_State() {
         is_A_Final_State = true;
     }
 
     /*
-     * This method returns true if the current state node is a final state
+     * Returns true if the current state node is a final state
      */
     public Boolean is_This_A_Final_State() {
         return is_A_Final_State;
     }
 
     /**
-     *
+     * Sets the current state as a starting state
      */
     public void set_As_The_Starting_State() {
         is_A_Start_State = true;
     }
 
     /**
+     * Returns true if the current state is a starting state
      *
      * @return is_A_Start_State
      */
@@ -66,13 +70,14 @@ public class StateNodes {
     }
 
     /**
-     *
+     * Sets the current state as a sink state
      */
     public void set_As_The_Sink_State() {
         is_The_Sink_State = true;
     }
 
     /**
+     * Returns true if the current state is a sink state
      *
      * @return is_The_Sink_State
      */
@@ -80,14 +85,13 @@ public class StateNodes {
         return is_The_Sink_State;
     }
 
-    //WARNING: for nfa you must keep tack of this in your states method that calls this method
     /**
+     * Adds a connection to this state
      *
      * @param element
      * @param connection
      * @return this_Diagram_Is_An_NFA
      */
-    //WARNING: MOVE "e" TO LAST
     public Boolean add_Connection(String element, String connection) {
         if (element.equals("e")) {
             this_Diagram_Is_An_NFA = true;
@@ -97,6 +101,12 @@ public class StateNodes {
         return this_Diagram_Is_An_NFA;
     }
 
+    /**
+     * Returns element connected stateId, or returns "false" if not found
+     *
+     * @param element
+     * @return
+     */
     public String find_Connection_DFA(String element) {
         Boolean found = false;
         String temp;
@@ -123,6 +133,12 @@ public class StateNodes {
         return "false";
     }
 
+    /**
+     * Adds stateId to NFA_States ArrayList; which keeps track of e-transition
+     * connections
+     *
+     * @param stateId
+     */
     public void add_NFA_StateIds(String stateId) {
         NFA_States.add(stateId);
     }
