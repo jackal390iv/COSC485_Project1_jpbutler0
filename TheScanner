@@ -1,7 +1,10 @@
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TheScanner {
@@ -17,14 +20,19 @@ public class TheScanner {
     public TheScanner() {
     }
 
-    public void userMessage() {
+    public void userMessage(String DFA_or_NFA, String Strings, String Answers) throws IOException {
+
+        // System.out.println(DFA_or_NFA);
+        // System.out.println(Strings);
+        // System.out.println(Answers);
+
 
         //System.out.println("Please enter the location/path to your DFA/NFA file now. For example: 'C:\\COSC485_Project1_jpbutler0\\...\\DFA.txt'"+ "\n");
         //path=input.nextLine(); 
-        reader(0, "/home/jackal/Desktop/NFA");
+        reader(0, DFA_or_NFA);
         //System.out.println("Please enter the location/path to your String file now. For example: 'C:\\COSC485_Project1_jpbutler0\\...\\String.txt'"+ "\n");
         //path=input.nextLine(); 
-        reader(1, "/home/jackal/Desktop/Strings");
+        reader(1, Strings);
 
         data_Entry(0);
 
@@ -34,28 +42,28 @@ public class TheScanner {
 
         designate_Starting_And_Final_States();
 
-        //System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
+        /*System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
 
-        ///diagram.print_State_Elements();
-        //System.out.println("\n" + "-------------------------------");
+         ///diagram.print_State_Elements();
+         //System.out.println("\n" + "-------------------------------");
 
-        System.out.println("\n" + "Original Starting & Final States:" + "\n" + "-------------------------------");
+         System.out.println("\n" + "Original Starting & Final States:" + "\n" + "-------------------------------");
 
-        diagram.print_Starting_State();
-        System.out.println();
+         diagram.print_Starting_State();
+         System.out.println();
 
-        diagram.print_Final_State();
-        System.out.println("\n");
+         diagram.print_Final_State();
+         System.out.println("\n");
 
-        System.out.println("\n" + "Original Connections:" + "\n" + "-------------------------------");
+         System.out.println("\n" + "Original Connections:" + "\n" + "-------------------------------");
 
-        diagram.print_States_And_Connections();
+         diagram.print_States_And_Connections();
 
-        System.out.println("-------------------------------");
+         System.out.println("-------------------------------");
 
-        //diagram.print_NFA_Nodes();
+         //diagram.print_NFA_Nodes();
 
-        //System.out.println("-------------------------------");
+         //System.out.println("-------------------------------");*/
 
         if (diagram.is_This_An_NFA_Diagram() == true) {
 
@@ -71,9 +79,9 @@ public class TheScanner {
 
             diagram.build_NFA();
 
-            System.out.println("\n" + "NFA Built Connections (Using NFA_Nodes):" + "\n" + "-------------------------------");
+            //System.out.println("\n" + "NFA Built Connections (Using NFA_Nodes):" + "\n" + "-------------------------------");
 
-            diagram.print_NFA_Nodes();
+            //diagram.print_NFA_Nodes();
 
         }
 
@@ -82,11 +90,12 @@ public class TheScanner {
         } else {
             testing_Strings(diagram.states);
         }
+        create_Output_Doc(Answers);
     }
 
     /**
-     * 
-     * @param choice 
+     *
+     * @param choice
      */
     public void reader(int choice, String location_Txt) {
         try {
@@ -327,10 +336,10 @@ public class TheScanner {
             diagram.add_A_Connection(stateId, element, connection);
 
             /*
-            System.out.println(temp);
-            System.out.println(stateId);
-            System.out.println(element);
-            System.out.println(connection);
+             System.out.println(temp);
+             System.out.println(stateId);
+             System.out.println(element);
+             System.out.println(connection);
              */
         }
         diagram.sort_States(diagram.states);
@@ -343,13 +352,23 @@ public class TheScanner {
             //System.out.println(the_Strings.get(i));
             correction = diagram.string_Validation_Check(the_Strings.get(i), node);
             output.add(correction);
-            System.out.println(output.get(i) + "\n" + "-------------------------------------" + "\n");
+            //System.out.println(output.get(i) + "\n" + "-------------------------------------" + "\n");
         }
     }
 
-    public void create_Command_Line_Input() {
-    }
-
-    public void create_Output_Doc() {
+    public void create_Output_Doc(String Answers) throws IOException {
+        File file = new File(Answers);
+        if (file.exists()) {
+            file.delete();
+        }
+        file.createNewFile();
+        //System.out.println(file.canWrite());
+        FileWriter file_Location = new FileWriter(file.getAbsoluteFile());
+        BufferedWriter writer = new BufferedWriter(file_Location);
+        for (int i = 0; i < output.size(); i++) {
+            writer.write(output.get(i));
+            writer.newLine();
+        }
+        writer.close();
     }
 }
