@@ -12,6 +12,7 @@ public class TheScanner {
     String line = null;
     ArrayList<String> NFA_DFA = new ArrayList<String>();
     ArrayList<String> the_Strings = new ArrayList<String>();
+    ArrayList<String> output = new ArrayList<String>();
 
     public TheScanner() {
     }
@@ -33,11 +34,10 @@ public class TheScanner {
 
         designate_Starting_And_Final_States();
 
+        //System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
 
-        System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
-
-        diagram.print_State_Elements();
-        System.out.println("\n" + "-------------------------------");
+        ///diagram.print_State_Elements();
+        //System.out.println("\n" + "-------------------------------");
 
         System.out.println("\n" + "Original Starting & Final States:" + "\n" + "-------------------------------");
 
@@ -47,69 +47,41 @@ public class TheScanner {
         diagram.print_Final_State();
         System.out.println("\n");
 
-
-
-
-
         System.out.println("\n" + "Original Connections:" + "\n" + "-------------------------------");
 
         diagram.print_States_And_Connections();
 
         System.out.println("-------------------------------");
 
-        diagram.print_NFA_Nodes();
+        //diagram.print_NFA_Nodes();
 
-        System.out.println("-------------------------------");
-
-
-
+        //System.out.println("-------------------------------");
 
         if (diagram.is_This_An_NFA_Diagram() == true) {
 
-
             diagram.the_Converter();
 
+            //System.out.println("\n" + "(e-Trans are found in the NFA_States/StateNodes):" + "\n" + "-------------------------------");
 
-            System.out.println("\n" + "(e-Trans are found in the NFA_States/StateNodes):" + "\n" + "-------------------------------");
+            //diagram.print_e_Trans();
 
-            diagram.print_e_Trans();
-
-            System.out.println("\n" + "-------------------------------");
-
+            //System.out.println("\n" + "-------------------------------");
 
             diagram.build_NFA_States();
 
-
-            System.out.println("\n" + "NFA Original (No e-Trans):" + "\n" + "-------------------------------");
-
-            diagram.print_States_And_Connections();
-
-            System.out.println("\n" + "-------------------------------");
-
             diagram.build_NFA();
-
-
 
             System.out.println("\n" + "NFA Built Connections (Using NFA_Nodes):" + "\n" + "-------------------------------");
 
             diagram.print_NFA_Nodes();
 
-            //diagram.print_NFA_Connections();
-
-            //System.out.println("\n" + "-------------------------------");
-            //System.out.println("\n" + "-------------------------------");
-
-            //diagram.print_NFA_States_Holder();
-
-
-
-
-
-
         }
 
-
-
+        if (diagram.is_This_An_NFA == true) {
+            testing_Strings(diagram.NFA_State_Nodes);
+        } else {
+            testing_Strings(diagram.states);
+        }
     }
 
     /**
@@ -225,6 +197,7 @@ public class TheScanner {
     }
 
     public void designate_Starting_And_Final_States() {
+
         int found = -1;
         int k = 1;
         String temp = null;
@@ -252,6 +225,7 @@ public class TheScanner {
             }
             k++;
         }
+        diagram.set_Final_State(diagram.starting_State);
         found = -1;
         k = 1;
         while (k < NFA_DFA.size()) {
@@ -363,24 +337,19 @@ public class TheScanner {
         //diagram.sort_Connections();
     }
 
-    public void testing_Strings() {
+    public void testing_Strings(ArrayList<StateNodes> node) {
         String correction = null;
         for (int i = 0; i < the_Strings.size(); i++) {
             //System.out.println(the_Strings.get(i));
-            correction = diagram.string_Validation_Check(the_Strings.get(i));
-            System.out.println(correction + "\n" + "-------------------------------------" + "\n");
+            correction = diagram.string_Validation_Check(the_Strings.get(i), node);
+            output.add(correction);
+            System.out.println(output.get(i) + "\n" + "-------------------------------------" + "\n");
         }
     }
 
-    /*
-    //WARNING: implement this method if there is time and cut down on memory consumption
-    public void NFA_To_DFA_Seperate() {
-    if (diagram.is_This_An_NFA_Diagram() == true) {
-    //NFA_diagram=diagram;
+    public void create_Command_Line_Input() {
     }
-    }
-     */
-    public void NFA_TO_DFA_Converter() {
-        //diagram.empty_All();
+
+    public void create_Output_Doc() {
     }
 }
