@@ -1,4 +1,3 @@
-
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -49,8 +48,10 @@ public class TheScanner {
         designate_State_Connections();
 
         designate_Starting_And_Final_States();
+        
+        diagram.double_Check_For_NFA();
 
-        /*System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
+       /* System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
 
          ///diagram.print_State_Elements();
          //System.out.println("\n" + "-------------------------------");
@@ -151,7 +152,7 @@ public class TheScanner {
         }
         System.out.println();
     }
-
+    
     /**
      * creates states from DFA/NFA text file and import them to the States class
      *
