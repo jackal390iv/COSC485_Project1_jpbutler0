@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -15,6 +16,7 @@ public class States {
     Integer starting_State_Location = -1;
     int the_Tracker = 0;
     int racer = 2;
+    int locate;
     String THE_holder;
     String THIS_ONE = "no";
 
@@ -38,6 +40,33 @@ public class States {
                 temp = temp.substring(0, temp.indexOf(","));
             }
             if (temp.equals(stateId)) {
+                stateLocation = i;
+            }
+        }
+        return stateLocation;
+    }
+
+    /**
+     * Finds an existing NFA state and returns the states location, or returns -1 if the state doesn't exist
+     * @param stateId
+     * @param node
+     * @return 
+     */
+    public int find_An_Existing_State_NFA(String stateId, ArrayList<StateNodes> node) {
+        int stateLocation = -1;
+        String temp;
+        for (int i = 0; i < node.size(); i++) {
+            temp = node.get(i).stateID;
+
+            if ((temp.contains(","))) {
+                temp = temp.substring(0, temp.indexOf(","));
+                locate = find_An_Existing_State(temp, states);
+                if (!(states.get(locate).NFA_States.isEmpty())) {
+                    if (temp.equals(stateId)) {
+                        stateLocation = i;
+                    }
+                }
+            } else if (temp.equals(stateId)) {
                 stateLocation = i;
             }
         }
@@ -178,6 +207,43 @@ public class States {
     }
 
     /**
+     * Tests strings for statesId's
+     * @param stateId
+     * @param node
+     * @return 
+     */
+    public int find_An_Existing_State_Checker(String stateId, ArrayList<StateNodes> node) {
+        int locate = find_An_Existing_State_Checker_Helper(stateId, node);
+        //System.out.println(locate);
+        if (locate == -1) {
+            if (stateId.contains(",")) {
+                stateId = stateId.substring(0, stateId.indexOf(","));
+                locate = find_An_Existing_State_Checker_Helper(stateId, node);
+            }
+        }
+        //System.out.println("stateid: "+stateId +" "+locate);
+        return locate;
+    }
+
+    /**
+     * extends find_An_Existing_State_Checker
+     * @param stateId
+     * @param node
+     * @return 
+     */
+    public int find_An_Existing_State_Checker_Helper(String stateId, ArrayList<StateNodes> node) {
+        int stateLocation = -1;
+        String temp;
+        for (int i = 0; i < node.size(); i++) {
+            temp = node.get(i).return_ID();
+            if (temp.equals(stateId)) {
+                stateLocation = i;
+            }
+        }
+        return stateLocation;
+    }
+
+    /**
      * extention of string_Validation_Check
      *
      * @param strings
@@ -189,14 +255,14 @@ public class States {
     public String find_Existing_Connection(String strings, int location, String stateId, ArrayList<StateNodes> node) {
 
         THIS_ONE = strings;
-        int locate = find_An_Existing_State(stateId, node);
+        int locate = find_An_Existing_State_Checker(stateId, node);
         stateId = node.get(locate).find_Connection_DFA(strings.substring(location, location + 1));
-        if (stateId.contains(",")) {
-            stateId = stateId.substring(0, stateId.indexOf(","));
-        }
+        // if (stateId.contains(",")) {
+        //stateId = stateId.substring(0, stateId.indexOf(","));
+        //}
         THE_holder = stateId;
         //the string is rejected
-        //System.out.println("stateID: "+THE_holder);
+        // System.out.println("stateID: " + THE_holder);
         if (stateId.equals("false")) {
             //System.out.println("FAILURE: connection not found");
             THIS_ONE = " is rejected";
@@ -207,7 +273,7 @@ public class States {
             find_Existing_Connection(strings, location, stateId, node);
         }
         if (!(THE_holder.equals("false"))) {
-            if ((node.get(find_An_Existing_State(THE_holder, node)).is_A_Final_State == false)) {
+            if ((node.get(find_An_Existing_State_Checker(THE_holder, node)).is_A_Final_State == false)) {
                 //System.out.println("FAILURE: does not end on final state");
                 THIS_ONE = " is rejected";
             } else {
@@ -509,7 +575,7 @@ public class States {
             NFA_New_States();
             only_Linear();
             location++;
-        } while (location < NFA_State_Nodes.size());
+        } while (location <= NFA_State_Nodes.size());
     }
 
     /**
@@ -522,7 +588,7 @@ public class States {
         }
         sort_Connections(NFA_State_Nodes);
         Matching_Connections_For_All(NFA_State_Nodes);
-        remove_Repeating_States(NFA_State_Nodes);
+        //remove_Repeating_States(NFA_State_Nodes);
     }
 
     /**
@@ -553,6 +619,7 @@ public class States {
                 NFA_State_Nodes.get(h).add_Connection(temp.substring(0, 1), temp.substring(1));
             }
         }
+        //-------------------------------------------------------------------------------------------------------------------------------
         for (int z = 0; z < NFA_State_Nodes.get(h).NFA_States_Holder.size(); z++) {
             String value = NFA_State_Nodes.get(h).NFA_States_Holder.get(z);
             int location = find_An_Existing_State(value, states);
@@ -619,7 +686,8 @@ public class States {
         for (int i = 0; i < NFA_State_Nodes.get(the_Tracker).stateConections.size(); i++) {
             String connection = NFA_State_Nodes.get(the_Tracker).stateConections.get(i);
             connection = connection.substring(1);
-            if (find_An_Existing_State(connection, NFA_State_Nodes) == -1) {
+            int found = find_An_Existing_State_NFA(connection, NFA_State_Nodes);
+            if (found == -1) {
                 NFA_State_Nodes.add(new StateNodes(connection));
                 NFA_States_Holder(connection, NFA_State_Nodes.size() - 1);
             }
@@ -686,25 +754,25 @@ public class States {
             }
         }
     }
-    
+
     /**
      * double checks states for multiple element connections for one state. 
      * If multiple connections are found then this is an NFA
      */
-    public void double_Check_For_NFA(){
-       for(int i=0;i<states.size();i++){
-           for(int k=0;k<states.get(i).stateConections.size();k++){
-               if(k!=0){
-                   String last_Element=states.get(i).stateConections.get(k-1);
-                   last_Element= last_Element.substring(0, 1);
-                   String current_Element=states.get(i).stateConections.get(k);
-                    current_Element= current_Element.substring(0, 1);
-                    
-                    if(current_Element.equals(last_Element)){
+    public void double_Check_For_NFA() {
+        for (int i = 0; i < states.size(); i++) {
+            for (int k = 0; k < states.get(i).stateConections.size(); k++) {
+                if (k != 0) {
+                    String last_Element = states.get(i).stateConections.get(k - 1);
+                    last_Element = last_Element.substring(0, 1);
+                    String current_Element = states.get(i).stateConections.get(k);
+                    current_Element = current_Element.substring(0, 1);
+
+                    if (current_Element.equals(last_Element)) {
                         is_This_An_NFA = true;
                     }
-               }               
-           }
-       }
+                }
+            }
+        }
     }
 }
