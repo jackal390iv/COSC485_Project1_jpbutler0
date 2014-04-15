@@ -1,3 +1,4 @@
+
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -41,6 +42,7 @@ public class TheScanner {
         //path=input.nextLine(); 
         reader(1, Strings);
 
+
         data_Entry(0);
 
         data_Entry(1);
@@ -48,39 +50,40 @@ public class TheScanner {
         designate_State_Connections();
 
         designate_Starting_And_Final_States();
-        
+
         diagram.double_Check_For_NFA();
 
-       /* System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
+        /*System.out.println("\n" + "State Elements Are:" + "\n" + "-------------------------------");
+        
+        diagram.print_State_Elements();
+        System.out.println("\n" + "-------------------------------");
+        
+        System.out.println("\n" + "Original Starting & Final States:" + "\n" + "-------------------------------");
+        
+        diagram.print_Starting_State();
+        System.out.println();
+        
+        diagram.print_Final_State();
+        System.out.println("\n");*/
 
-         ///diagram.print_State_Elements();
-         //System.out.println("\n" + "-------------------------------");
+        //System.out.println("\n" + "Original Connections:" + "\n" + "-------------------------------");
 
-         System.out.println("\n" + "Original Starting & Final States:" + "\n" + "-------------------------------");
+        //diagram.print_States_And_Connections();
 
-         diagram.print_Starting_State();
-         System.out.println();
+        //System.out.println("-------------------------------");
 
-         diagram.print_Final_State();
-         System.out.println("\n");
+        //diagram.print_NFA_Nodes();
 
-         System.out.println("\n" + "Original Connections:" + "\n" + "-------------------------------");
+        //System.out.println("-------------------------------");*/
 
-         diagram.print_States_And_Connections();
-
-         System.out.println("-------------------------------");
-
-         //diagram.print_NFA_Nodes();
-
-         //System.out.println("-------------------------------");*/
 
         if (diagram.is_This_An_NFA_Diagram() == true) {
 
             diagram.the_Converter();
 
-            //System.out.println("\n" + "(e-Trans are found in the NFA_States/StateNodes):" + "\n" + "-------------------------------");
+            // System.out.println("\n" + "(e-Trans are found in the NFA_States/StateNodes):" + "\n" + "-------------------------------");
 
-            //diagram.print_e_Trans();
+            // diagram.print_e_Trans();
 
             //System.out.println("\n" + "-------------------------------");
 
@@ -152,7 +155,7 @@ public class TheScanner {
         }
         System.out.println();
     }
-    
+
     /**
      * creates states from DFA/NFA text file and import them to the States class
      *
@@ -370,10 +373,10 @@ public class TheScanner {
             diagram.add_A_Connection(stateId, element, connection);
 
             /*
-             System.out.println(temp);
-             System.out.println(stateId);
-             System.out.println(element);
-             System.out.println(connection);
+            System.out.println(temp);
+            System.out.println(stateId);
+            System.out.println(element);
+            System.out.println(connection);
              */
         }
         diagram.sort_States(diagram.states);
