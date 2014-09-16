@@ -7,7 +7,7 @@ Revision date: 4/13/2014
 
 Limitations: In order to run as intended this program only accepts 
 
-DFA/NFA and Strins text file using the same template as the examples 
+DFA/NFA and Strings text file using the same template as the examples 
 
 given. Avoid using characters besides letters or numbers as your 
 
