@@ -1,0 +1,19 @@
+
+import java.io.IOException;
+
+public class COSC485_Project1_jpbutler0 {
+
+    public static void main(String[] args) throws IOException {
+
+        //System.out.println("this project accepts DFA and NFA");
+
+        TheScanner the_Scanner = new TheScanner();
+
+        //DFA is on args[0] & NFA is on args[3]
+        String DFA_or_NFA = args[0];
+        String Strings = args[1];
+        String Answers = args[2];
+
+        the_Scanner.userMessage(DFA_or_NFA, Strings, Answers);
+    }
+}
